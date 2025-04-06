@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+@media (max-width: 640px) {
+  .sidebar {
+    position: fixed;
+    top: 77px;
+    left: 0;
+    height: calc(100vh - 77px);
+    transform: translateX(-100%);
+    z-index: 50;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .sidebar.open { 
+    transform: translateX(0);
+  }
+}
+
+header {
+  background-color: #1e293b;
+  color: white;
+}
+
+button[aria-current="page"] {
+  background-color: #10b981;
+  color: white;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+table thead th {
+  background-color: #f3f4f6;
+  color: #1f2937;
+} 
+
+@media (max-width: 640px) {
+  .sidebar {
+    position: fixed;
+    top: 77px;
+    left: 0;
+    height: calc(100vh - 77px);
+    transform: translateX(-100%);
+    z-index: 50;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+}
+
+header {
+  background-color: #1e293b;
+  color: white;
+}
+
+button[aria-current="page"] {
+  background-color: #10b981;
+  color: white;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+table thead th {
+  background-color: #f3f4f6;
+  color: #1f2937;
+}
