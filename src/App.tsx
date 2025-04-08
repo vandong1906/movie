@@ -7,17 +7,25 @@ import TheatersPage from '../src/components/TheatersPage/TheatersPage';
 import OrdersPage from '../src/components/OrdersPage/OrdersPage';
 import './App.css';
 
+import MovieTicket from './components/ticket/ticket';
+import Myticket from './components/ticket/myticket';
+import ShowsPage from './components/Shows';
+
 const App: React.FC = () => {
   return (
-    <Router>
+<Router>
       <div className="w-full bg-white min-h-screen">
         <Routes>
           <Route path="/" element={<AdminDashboard />}>
+            <Route index element={<MoviesPage />} /> 
             <Route path="movies" element={<MoviesPage />} />
             <Route path="theaters" element={<TheatersPage />} />
             <Route path="orders" element={<OrdersPage />} />
-            <Route index element={<MoviesPage />} /> {/* Default route */}
+            <Route path="shows" element={<ShowsPage />} />
           </Route>
+          <Route path="/ticket" element={<MovieTicket />}/>
+          <Route path="/user" element={<Myticket />} />
+      
         </Routes>
       </div>
     </Router>

@@ -1,0 +1,42 @@
+.word-break-all {
+    word-break: break-all;
+  }
+  
+  .industries .card:hover {
+    transform: scale(1.02);
+  }
+  
+  .industries .card:hover span {
+    max-height: 100px;
+    opacity: 1;
+  }
+  
+  /* From the original file */
+  @media (max-width: 640px) {
+    #sideNav {
+      position: fixed;
+      top: 77px;
+      left: 0;
+      height: calc(100vh - 77px);
+      transform: translateX(-100%);
+      z-index: 50;
+      transition: transform 0.3s ease-in-out;
+    }
+  
+    #sideNav.open {
+      transform: translateX(0);
+    }
+  }
+  
+  header {
+    background-color: #1e293b;
+    color: white;
+  }
+  
+  button:hover {
+    opacity: 0.9;
+  }
+  
+  .text-red-500:hover {
+    text-decoration: underline;
+  }
