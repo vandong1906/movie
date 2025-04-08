@@ -33,6 +33,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, navigate, handleLogout }) => 
         Orders
       </button>
       <button
+        className="p-4 text-lg sm:text-3xl w-full text-left hover:bg-gray-100"
+        onClick={() => navigate('shows')}
+      >
+        shows
+      </button>
+      <button
         className="p-4 text-lg sm:text-3xl text-red-500 w-full text-left hover:bg-red-50"
         onClick={handleLogout}
       >

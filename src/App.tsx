@@ -6,7 +6,6 @@ import MoviesPage from '../src/components/Movie/MoviesPage';
 import TheatersPage from '../src/components/TheatersPage/TheatersPage';
 import OrdersPage from '../src/components/OrdersPage/OrdersPage';
 import './App.css';
-
 import MovieTicket from './components/ticket/ticket';
 import Myticket from './components/ticket/myticket';
 import ShowsPage from './components/Shows';
