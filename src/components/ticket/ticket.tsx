@@ -13,9 +13,12 @@ const respon = async ()=>{
 }
 respon();
   },[])
-  console.log(data1)
+  console.log(data1);
   return ( <>
-    <div className="flex gap-2 items-center justify-center min-h-screen">
+<div> <button className='text-black'>
+Back To HomePage
+  </button></div>
+    <div className="flex gap-2 items-center justify-center min-h-screen bg-cover bg-[url(https://s3-alpha-sig.figma.com/img/ac26/65e1/7e7536becff2727e8b3e5763e0b700ae?Expires=1745193600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=JbvtTeD8NFSWKsTwp4RNhmzNwySMCqihKtDd7vysoOXzh21SReSrw~kjTfiTFJKrlIwlH2fs33HPc1zjElAAHa7c~Qm8hou4kYJg6AMGJIz~SxtoyvnbdFAyt8hkwesWaocxHpG0Xlu5XhJYKBkuspF5ZsoaH5xVjrDuVNsFGooSkvWxKoIdqnIRJMdD-nJ5b4QmObvn3Mnsz2~6fSSciVmsXEp4A7GiSfHuStup0YJJRo-O4wZMqkXW2sMCKLLPxsJhoLgyW5XQFOwNnHPCtjRCI0MUhcvlOLJFDwy1VgvICYAcMO5fr4Parbc0fAIR2chpx0gk2qT16LwyoEXUlw__)]">
       <div className="bg-gray-800 bg-opacity-80 rounded-lg p-6 shadow-lg text-white w-80">
         <div className="mb-4">  
           <p className="text-sm text-gray-400">Date</p>

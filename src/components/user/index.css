@@ -1,0 +1,605 @@
+/* General */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+
+.app-container {
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* AuthLayout (Login & Register) */
+.min-h-screen {
+  min-height: 100vh;
+  display: flex;
+}
+
+.left-section {
+  flex: 1;
+  width: 50vw;
+  /* đảm bảo đúng nửa màn hình */
+  height: 100vh;
+  background: linear-gradient(to bottom right, #000, #1a3c34);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 24px;
+  color: white;
+  position: relative;
+}
+
+.welcome-text {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  right: 200px;
+  text-align: left;
+}
+
+.welcome-text h2 {
+  margin: 0;
+  text-transform: none;
+  font-style: italic;
+  font-size: 2.5rem;
+  margin-top: 20px;
+  line-height: 1.4;
+  font-family: 'Poppins', sans-serif;
+}
+
+.right-section {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 50%;
+  background: white;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.right-section h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 2rem;
+  margin-left: 60px;
+  font-weight: 600;
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.signup-form label {
+  font-size: 1rem;
+  /* Increased from 0.875rem to match the image */
+  font-weight: 500;
+  /* Medium weight for labels */
+  color: #000000;
+  /* Black text */
+  margin-bottom: 0.5rem;
+  display: block;
+  font-family: 'Poppins', sans-serif;
+}
+
+.signup-form input {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #000000;
+  /* Black text */
+  background: #FFFFFF;
+  /* White background */
+  border: 1px solid #D1D5DB;
+  /* Light gray border */
+  border-radius: 8px;
+  padding: 0.75rem;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+.password-container {
+  position: relative;
+}
+
+.eye-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.create-button {
+  padding: 12px;
+  background-color: #00cc00;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 600px;
+  flex-direction: column;
+}
+
+.create-button:hover {
+  background-color: #00b300;
+}
+
+.login-link {
+  margin-top: 15px;
+  text-align: center;
+  color: silver;
+  /* Black text */
+  font-family: 'Poppins', sans-serif;
+}
+
+.login-link a {
+  color: #00cc00;
+  text-decoration: none;
+}
+
+/* Home */
+.home-container {
+  min-height: 100vh;
+  width: 100%;
+  background: linear-gradient(to bottom right, #000, #1a3c34);
+  color: white;
+  font-family: 'Poppins', sans-serif;
+}
+
+.header {
+  padding-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding-left: 15px;
+}
+
+.logo-home {
+  display: flex;
+  align-items: center;
+  width: 127px;
+  height: 49px;
+  margin-right: 8px;
+  padding-left: 15px;
+  padding-top: 15px;
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.auth-button {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.auth-button,
+.logout-button {
+  padding: 6px 16px;
+  background-color: #00cc00;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  width: 85px;
+  height: 49px;
+  margin-right: 15px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.logout-button {
+  background-color: #ff0000;
+}
+
+.logout-button:hover {
+  border: 2px solid silver;
+  /* Thicker border on hover */
+  box-shadow: 0 0 2px white;
+  /* Glowing effect */
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+  /* White text */
+  text-align: center;
+  /* Center the title */
+  margin: 2rem 0;
+  /* Spacing above and below */
+}
+
+.movie-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  /* 4 columns */
+  gap: 1.5rem;
+  /* Space between cards */
+  padding: 0 2rem 2rem;
+  /* Padding on sides and bottom */
+  margin: 0 auto;
+}
+
+.movie-card {
+  background: transparent;
+  /* No background */
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.movie-card:hover {
+  transform: scale(1.05);
+  /* Zoom in by 5% */
+}
+
+.movie-poster {
+  width: 100%;
+  height: 350px;
+  /* Fixed height for consistency */
+  object-fit: cover;
+  /* Ensure image covers the area */
+  border-radius: 8px;
+  /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.movie-title {
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* MovieDetail */
+.movie-detail-container {
+  background: linear-gradient(to bottom right, #000, #1a3c34);
+  padding: 20px;
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+.movie-detail-content {
+  display: flex;
+  gap: 30px;
+  gap: 2rem;
+  padding: 1.5rem 2.5rem;
+  color: white;
+
+  justify-content: center;
+
+}
+
+.selection-section {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.selection-section h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.options {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.option-button {
+  padding: 0.5rem 1rem;
+  border: 1px solid white;
+  border-radius: 9999px;
+  background-color: transparent;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.option-button.selected {
+  background-color: #00cc00;
+  color: black;
+}
+
+.movie-info-section {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  text-align: center;
+}
+
+.movie-poster-large {
+  width: 15rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Style cho nút Back to Home */
+.back-to-home-button {
+  margin-top: 30px;
+  background-color: transparent;
+  color: white;
+  cursor: pointer;
+  border: none;
+  margin-left: 0;
+  /* đảm bảo không bị đẩy sang phải */
+  padding-left: 25px;
+  /* loại bỏ padding nếu có */
+  align-self: flex-start;
+}
+
+.back-to-home-button:hover {
+  border: 2px solid silver;
+  /* Thicker border on hover */
+  box-shadow: 0 0 2px white;
+}
+
+.movie-info-section h2 {
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.movie-description {
+  font-size: 0.9rem;
+  color: #ccc;
+  margin-bottom: 10px;
+  opacity: 0.85;
+}
+
+.movie-details p {
+  font-size: 0.9rem;
+}
+
+.movie-details span {
+  font-weight: bold;
+}
+
+.booking-summary {
+  background-color: rgba(0, 0, 0, 0.4);
+  border: 1px solid white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  width: 100%;
+}
+
+.booking-summary h4 {
+  font-size: 1.2rem;
+  margin-bottom: 5px;
+}
+
+.note {
+  font-size: 0.8rem;
+  color: #ccc;
+  margin-bottom: 0.5rem;
+}
+
+.proceed-button:hover {
+  background-color: #16a34a;
+}
+
+.proceed-button {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #00cc00;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.login-link {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.login-link a {
+  color: #00cc00;
+  text-decoration: none;
+}
+
+/* Load Poppins font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+
+/* Container for the two-column layout */
+.auth-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Left section with gradient background */
+.auth-layout .left-section {
+  flex: 1;
+  /* 50% width */
+  background: linear-gradient(135deg, #0A2E2B 0%, #051413 100%);
+  /* Dark teal gradient with a hint of green */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+  /* For positioning the logo */
+}
+
+/* Right section with the form */
+.auth-layout .right-section {
+  flex: 1;
+  /* 50% width */
+  background: #FFFFFF;
+  /* White background */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4rem;
+}
+
+/* Logo styling */
+.logo {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  width: 100px;
+  /* Adjust size as needed */
+}
+
+/* Styling the text in the left section */
+.left-content h1 {
+  font-size: 3rem;
+  font-weight: 300;
+  /* Light weight for "Welcome." */
+  color: #FFFFFF;
+  /* White text */
+  margin-bottom: 0.5rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+.left-content h2 {
+  font-size: 1.75rem;
+  font-weight: 300;
+  /* Light weight for the subtitle */
+  color: #FFFFFF;
+  /* White text */
+  opacity: 0.7;
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.4;
+}
+
+/* Form styling */
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* canh giữa theo chiều ngang */
+  gap: 15px;
+  max-width: 400px;
+  margin: 0 auto;
+  width: 600px;
+}
+
+.signup-form label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  /* Medium weight for labels */
+  color: #000000;
+  /* Black text */
+  margin-bottom: 0.5rem;
+  display: block;
+  font-family: 'Poppins', sans-serif;
+  width: 600px;
+}
+
+.signup-form input {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #000000;
+  /* Black text */
+  background: #FFFFFF;
+  /* White background */
+  border: 1px solid #D1D5DB;
+  /* Light gray border */
+  border-radius: 8px;
+  padding: 0.75rem;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+  width: 600px;
+}
+
+.signup-form input::placeholder {
+  color: #BEBEBF;
+  /* Light gray placeholder */
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+}
+
+/* Title styling */
+.auth-layout .right-section h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  /* Bold weight for "Create an account" */
+  color: #000000;
+  /* Black text */
+  margin-bottom: 2rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Button styling */
+.create-button {
+  background-color: #1DE782;
+  /* Bright green from provided colors */
+  color: #FFFFFF;
+  /* White text */
+  font-size: 1rem;
+  font-weight: 500;
+  /* Medium weight for the button */
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+}
+
+.create-button:hover {
+  background-color: #17C66E;
+  /* Slightly darker green on hover */
+}
+
+/* Login link styling */
+.auth-layout .login-link {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.auth-layout .login-link p {
+  font-size: 0.875rem;
+  color: #BEBEBF;
+  /* Light gray text */
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+}
+
+.auth-layout .login-link a {
+  color: #1DE782;
+  /* Bright green for the link */
+  text-decoration: none;
+  font-weight: 500;
+  /* Medium weight for the "Log in" link */
+  font-family: 'Poppins', sans-serif;
+}
+
+.auth-layout .login-link a:hover {
+  text-decoration: underline;
+}
+
+/* Eye icon styling */
+.eye-icon {
+  font-family: 'Poppins', sans-serif;
+  /* Ensure the emoji inherits the font */
+}
