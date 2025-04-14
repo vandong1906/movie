@@ -15,6 +15,9 @@ interface TheaterTableProps {
 }
 
 const TheaterTable: React.FC<TheaterTableProps> = ({ theaters, onCreate, onEdit, onDelete }) => {
+  const currentTheaters = theaters; // Assuming currentTheaters is derived from theaters
+  const indexOfFirstTheater = 0; // Assuming indexOfFirstTheater is defined somewhere
+
   return (
     <>
       <div className="flex justify-end mb-6">
@@ -36,16 +39,16 @@ const TheaterTable: React.FC<TheaterTableProps> = ({ theaters, onCreate, onEdit,
             </tr>
           </thead>
           <tbody>
-            {theaters.length === 0 ? (
+            {currentTheaters.length === 0 ? (
               <tr>
                 <td colSpan={4} className="text-center p-4 text-gray-500">
                   No theaters available.
                 </td>
               </tr>
             ) : (
-              theaters.map((theater, index) => (
+              currentTheaters.map((theater, index) => (
                 <tr key={theater.theater_id}>
-                  <td className="p-2 text-center border border-gray-300">{index + 1}</td>
+                  <td className="p-2 text-center border border-gray-300">{indexOfFirstTheater + index + 1}</td>
                   <td className="p-2 border border-gray-300">{theater.theater_name}</td>
                   <td className="p-2 border border-gray-300">{theater.location}</td>
                   <td className="p-2 border border-gray-300">

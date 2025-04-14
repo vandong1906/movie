@@ -17,6 +17,8 @@ const MoviesPage: React.FC = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingMovieId, setEditingMovieId] = useState<number | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const moviesPerPage = 10;
 
   const fetchMovies = async () => {
     try {
@@ -34,10 +36,14 @@ const MoviesPage: React.FC = () => {
     fetchMovies();
   }, []);
 
+  const indexOfLastMovie = currentPage * moviesPerPage;
+  const indexOfFirstMovie = indexOfLastMovie - moviesPerPage;
+  const currentMovies = movies.slice(indexOfFirstMovie, indexOfLastMovie);
+
   return (
     <>
       <MovieTable
-        movies={movies}
+        movies={currentMovies}
         onCreate={() => setIsModalOpen(true)}
         onEdit={(id) => {
           setEditingMovieId(id);
@@ -58,6 +64,25 @@ const MoviesPage: React.FC = () => {
           }
         }}
       />
+      <div className="flex justify-between items-center mt-4">
+        <button
+          disabled={currentPage === 1}
+          onClick={() => setCurrentPage((prev) => prev - 1)}
+          className="px-4 py-2 border rounded disabled:opacity-50"
+        >
+          Previous
+        </button>
+        <span>
+          Page {currentPage} of {Math.ceil(movies.length / moviesPerPage)}
+        </span>
+        <button
+          disabled={currentPage === Math.ceil(movies.length / moviesPerPage)}
+          onClick={() => setCurrentPage((prev) => prev + 1)}
+          className="px-4 py-2 border rounded disabled:opacity-50"
+        >
+          Next
+        </button>
+      </div>
       {isModalOpen && (
         <CreateMovieModal
           movie={movies.find((m) => m.movie_id === editingMovieId)}
