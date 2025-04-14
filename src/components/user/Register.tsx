@@ -4,7 +4,7 @@ import AuthLayout from '../user/AuthLayout';
 import axios from 'axios';
 
 const Register: React.FC = () => {
-  const [userName, setUserName] = useState<string>('');
+  const [email, setUserName] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPass, setConfirmPass] = useState<string>('');
   const [error, setError] = useState<string>('');
@@ -14,15 +14,16 @@ const Register: React.FC = () => {
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
-
+    console.log(password,"    0",email)
     if (password !== confirmPass) {
       setError("Passwords don't match");
       return;
     }
+ 
 
     try {
       const res = await axios.post('https://backendmovie-10gn.onrender.com/api/admins', {
-        User_name: userName,
+        email: email,
         password,
       });
 
@@ -41,7 +42,7 @@ const Register: React.FC = () => {
         <input
           id="email"
           type="email"
-          value={userName}
+          value={email}
           onChange={(e) => setUserName(e.target.value)}
           placeholder="@gmail.com"
           required

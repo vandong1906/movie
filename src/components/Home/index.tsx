@@ -27,7 +27,7 @@ const Home: React.FC = () => {
   };
 
   const handleRegister = () => {
-    navigate('/');
+    navigate('/register');
   };
 
   useEffect(() => {

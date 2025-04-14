@@ -10,7 +10,7 @@ interface User {
 }
 
 const Login: React.FC = () => {
-  const [userName, setUserName] = useState<string>('');
+  const [email, setUserName] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -22,7 +22,7 @@ const Login: React.FC = () => {
 
     try {
       const res = await axios.post<{ user: User }>('https://backendmovie-10gn.onrender.com/api/admins/login', {
-        User_name: userName,
+        email: email,
         password,
       });
 
@@ -45,7 +45,7 @@ const Login: React.FC = () => {
           <input
             id="email"
             type="email"
-            value={userName}
+            value={email}
             onChange={(e) => setUserName(e.target.value)}
             placeholder="balamia@gmail.com"
             required
