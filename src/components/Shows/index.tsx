@@ -14,6 +14,9 @@ const AdminShows: React.FC = () => {
   const [form, setForm] = useState({ movie_id: "", theater_id: "", show_time: "" });
   const [tickets, setTickets] = useState<any[]>([]);
   const [modals, setModals] = useState({ create: false, delete: false, view: false });
+  const [currentPage, setCurrentPage] = useState(1);
+  const ticketsPerPage = 10; // Number of tickets per page
+  const showsPerPage = 10; // Number of shows per page
 
   useEffect(() => {
     fetchData();
@@ -113,11 +116,20 @@ const AdminShows: React.FC = () => {
       const res = await fetch(`${TICKETS_API_URL}/show/${id}`);
       const data = await res.json();
       setTickets(data);
+      setCurrentPage(1); // Reset to the first page
       setModals((prev) => ({ ...prev, view: true }));
     } catch (err) {
       alert("Failed to fetch tickets");
     }
   };
+
+  const indexOfLastTicket = currentPage * ticketsPerPage;
+  const indexOfFirstTicket = indexOfLastTicket - ticketsPerPage;
+  const currentTickets = tickets.slice(indexOfFirstTicket, indexOfLastTicket);
+
+  const indexOfLastShow = currentPage * showsPerPage;
+  const indexOfFirstShow = indexOfLastShow - showsPerPage;
+  const currentShows = shows.slice(indexOfFirstShow, indexOfLastShow);
 
   return (
     <div className="p-4 sm:p-6">
@@ -137,9 +149,9 @@ const AdminShows: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {shows.map((show, index) => (
+          {currentShows.map((show, index) => (
             <tr key={show.show_id}>
-              <td className="p-2 border">{index + 1}</td>
+              <td className="p-2 border">{indexOfFirstShow + index + 1}</td>
               <td className="p-2 border">{movieMap[show.movie_id] || "N/A"}</td>
               <td className="p-2 border">{theaterMap[show.theater_id] || "N/A"}</td>
               <td className="p-2 border">{show.show_time}</td>
@@ -152,6 +164,26 @@ const AdminShows: React.FC = () => {
           ))}
         </tbody>
       </table>
+
+      <div className="flex justify-between items-center mt-4">
+        <button
+          disabled={currentPage === 1}
+          onClick={() => setCurrentPage((prev) => prev - 1)}
+          className="px-4 py-2 border rounded disabled:opacity-50"
+        >
+          Previous
+        </button>
+        <span>
+          Page {currentPage} of {Math.ceil(shows.length / showsPerPage)}
+        </span>
+        <button
+          disabled={currentPage === Math.ceil(shows.length / showsPerPage)}
+          onClick={() => setCurrentPage((prev) => prev + 1)}
+          className="px-4 py-2 border rounded disabled:opacity-50"
+        >
+          Next
+        </button>
+      </div>
 
       {/* Create/Edit Modal */}
       {modals.create && (
@@ -245,9 +277,9 @@ const AdminShows: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {tickets.map((ticket, i) => (
+                {currentTickets.map((ticket, i) => (
                   <tr key={i}>
-                    <td className="p-2 border">{i + 1}</td>
+                    <td className="p-2 border">{indexOfFirstTicket + i + 1}</td>
                     <td className="p-2 border">{ticket.user_id}</td>
                     <td className="p-2 border">{ticket.seat_number}</td>
                     <td className="p-2 border">{ticket.price}</td>
@@ -256,6 +288,25 @@ const AdminShows: React.FC = () => {
                 ))}
               </tbody>
             </table>
+            <div className="flex justify-between items-center mt-4">
+              <button
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage((prev) => prev - 1)}
+                className="px-4 py-2 border rounded disabled:opacity-50"
+              >
+                Previous
+              </button>
+              <span>
+                Page {currentPage} of {Math.ceil(tickets.length / ticketsPerPage)}
+              </span>
+              <button
+                disabled={currentPage === Math.ceil(tickets.length / ticketsPerPage)}
+                onClick={() => setCurrentPage((prev) => prev + 1)}
+                className="px-4 py-2 border rounded disabled:opacity-50"
+              >
+                Next
+              </button>
+            </div>
             <div className="flex justify-end mt-4">
               <button className="border p-2 rounded" onClick={() => setModals({ ...modals, view: false })}>
                 Close

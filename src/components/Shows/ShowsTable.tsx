@@ -45,7 +45,7 @@ const ShowsTable: React.FC<ShowsTableProps> = ({ shows, movies, theaters, onCrea
           <tbody>
             {shows.length === 0 ? (
               <tr>
-                <td colSpan={5} className="text-center p-4 text-gray-500">
+                <td colSpan={10} className="text-center p-4 text-gray-500">
                   No shows available.
                 </td>
               </tr>

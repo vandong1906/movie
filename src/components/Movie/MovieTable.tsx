@@ -17,6 +17,9 @@ interface MovieTableProps {
 }
 
 const MovieTable: React.FC<MovieTableProps> = ({ movies, onCreate, onEdit, onDelete }) => {
+  const currentMovies = movies; // Assuming currentMovies is the same as movies for this example
+  const indexOfFirstMovie = 0; // Assuming indexOfFirstMovie is 0 for this example
+
   return (
     <>
       <div className="flex justify-end mb-6">
@@ -40,16 +43,16 @@ const MovieTable: React.FC<MovieTableProps> = ({ movies, onCreate, onEdit, onDel
             </tr>
           </thead>
           <tbody>
-            {movies.length === 0 ? (
+            {currentMovies.length === 0 ? (
               <tr>
                 <td colSpan={6} className="text-center p-4 text-gray-500">
                   No movies available.
                 </td>
               </tr>
             ) : (
-              movies.map((movie, index) => (
+              currentMovies.map((movie, index) => (
                 <tr key={movie.movie_id}>
-                  <td className="p-2 text-center border border-gray-300">{index + 1}</td>
+                  <td className="p-2 text-center border border-gray-300">{indexOfFirstMovie + index + 1}</td>
                   <td className="p-2 border border-gray-300">
                     <img src={movie.path} alt={movie.movie_name} className="w-16 h-16 object-cover rounded" />
                   </td>

@@ -15,6 +15,8 @@ const TheatersPage: React.FC = () => {
   const [theaters, setTheaters] = useState<Theater[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTheaterId, setEditingTheaterId] = useState<number | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const theatersPerPage = 10;
 
   const fetchTheaters = async () => {
     try {
@@ -32,16 +34,20 @@ const TheatersPage: React.FC = () => {
     fetchTheaters();
   }, []);
 
+  const indexOfLastTheater = currentPage * theatersPerPage;
+  const indexOfFirstTheater = indexOfLastTheater - theatersPerPage;
+  const currentTheaters = theaters.slice(indexOfFirstTheater, indexOfLastTheater);
+
   return (
     <>
       <TheaterTable
-        theaters={theaters}
+        theaters={currentTheaters}
         onCreate={() => setIsModalOpen(true)}
-        onEdit={(id:number) => {
+        onEdit={(id: number) => {
           setEditingTheaterId(id);
           setIsModalOpen(true);
         }}
-        onDelete={(id:number) => {
+        onDelete={(id: number) => {
           if (window.confirm("Are you sure you want to delete this theater?")) {
             fetch(`${API_BASE_URL}/${id}`, { method: "DELETE" })
               .then((response) => {
@@ -56,6 +62,25 @@ const TheatersPage: React.FC = () => {
           }
         }}
       />
+      <div className="flex justify-between items-center mt-4">
+        <button
+          disabled={currentPage === 1}
+          onClick={() => setCurrentPage((prev) => prev - 1)}
+          className="px-4 py-2 border rounded disabled:opacity-50"
+        >
+          Previous
+        </button>
+        <span>
+          Page {currentPage} of {Math.ceil(theaters.length / theatersPerPage)}
+        </span>
+        <button
+          disabled={currentPage === Math.ceil(theaters.length / theatersPerPage)}
+          onClick={() => setCurrentPage((prev) => prev + 1)}
+          className="px-4 py-2 border rounded disabled:opacity-50"
+        >
+          Next
+        </button>
+      </div>
       {isModalOpen && (
         <CreateTheaterModal
           theater={theaters.find((t) => t.theater_id === editingTheaterId)}

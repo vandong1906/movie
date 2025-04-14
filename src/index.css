@@ -12,3 +12,19 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+td{
+  color: black
+}
+input{
+  color: black;
+  background-color: white;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+}
+label{
+  color: black;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+@import "tailwindcss";
