@@ -16,28 +16,28 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, navigate, handleLogout }) => 
     >
       <button
         className="p-4 text-lg sm:text-3xl w-full text-left bg-emerald-300"
-        onClick={() => navigate('movies')}
+        onClick={() => navigate('admin/movies')}
       >
         Movies
-      </button>
+      </button> 
       <button
         className="p-4 text-lg sm:text-3xl w-full text-left hover:bg-gray-100"
-        onClick={() => navigate('theaters')}
+        onClick={() => navigate('admin/theaters')}
       >
         Theaters
       </button>
       <button
         className="p-4 text-lg sm:text-3xl w-full text-left hover:bg-gray-100"
-        onClick={() => navigate('shows')}
+        onClick={() => navigate('admin/shows')}
       >
         Shows
-      </button>
-      <button
+      </button>   <button
         className="p-4 text-lg sm:text-3xl w-full text-left hover:bg-gray-100"
-        onClick={() => navigate('orders')}
+        onClick={() => navigate('admin/tickets')}
       >
-        Orders
+        Tickets
       </button>
+     
       <button
         className="p-4 text-lg sm:text-3xl text-red-500 w-full text-left hover:bg-red-50"
         onClick={handleLogout}
