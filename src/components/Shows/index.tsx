@@ -110,7 +110,7 @@ const AdminShows: React.FC = () => {
 
   const viewTickets = async (id: number) => {
     try {
-      const res = await fetch(`${TICKETS_API_URL}show/${id}`);
+      const res = await fetch(`${TICKETS_API_URL}/show/${id}`);
       const data = await res.json();
       setTickets(data);
       setModals((prev) => ({ ...prev, view: true }));
