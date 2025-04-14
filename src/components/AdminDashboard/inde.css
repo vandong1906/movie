@@ -1,0 +1,163 @@
+@media (max-width: 640px) {
+    #sideNav {
+      position: fixed;
+      top: 77px;
+      left: 0;
+      height: calc(100vh - 77px);
+      transform: translateX(-100%);
+      z-index: 50;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    #sideNav.open {
+      transform: translateX(0);
+    }
+  }
+
+  header {
+    background-color: #1e293b;
+    color: white;
+  }
+
+  nav button[aria-current="page"] {
+    background-color: #10b981;
+    color: white;
+  }
+
+  nav button:hover {
+    background-color: #d1fae5;
+  }
+
+  table thead th {
+    background-color: #f3f4f6;
+    color: #1f2937;
+  }
+
+  button:hover {
+    opacity: 0.9;
+  } @media (max-width: 640px) {
+    #sideNav {
+        position: fixed;
+        top: 77px;
+        left: 0;
+        height: calc(100vh - 77px);
+        transform: translateX(-100%);
+        z-index: 50;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    #sideNav.open {
+        transform: translateX(0);
+    }
+}
+
+header {
+    background-color: #1e293b;
+    color: white;
+}
+
+nav button[aria-current="page"] {
+    background-color: #10b981;
+    color: white;
+}
+
+nav button:hover {
+    background-color: #d1fae5;
+}
+
+table thead th {
+    background-color: #f3f4f6;
+    color: #1f2937;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+.text-red-500:hover {
+    text-decoration: underline;
+}  @media (max-width: 640px) {
+    #sideNav {
+      position: fixed;
+      top: 77px;
+      left: 0;
+      height: calc(100vh - 77px);
+      transform: translateX(-100%);
+      z-index: 50;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    #sideNav.open {
+      transform: translateX(0);
+    }
+  }
+
+  /* Header background color */
+  header {
+    background-color: #1e293b; /* Dark blue-gray */
+    color: white;
+  }
+
+  /* Sidebar active button color */
+  nav button[aria-current="page"] {
+    background-color: #10b981; /* Emerald green */
+    color: white;
+  }
+
+  /* Sidebar button hover effect */
+  nav button:hover {
+    background-color: #d1fae5; /* Light emerald green */
+  }
+
+  /* Table header background */
+  table thead th {
+    background-color: #f3f4f6; /* Light gray */
+    color: #1f2937; /* Dark gray */
+  }
+
+  /* Button hover effects */
+  button:hover {
+    opacity: 0.9;
+  }
+  @media (max-width: 640px) {
+    #sideNav {
+        position: fixed;
+        top: 77px;
+        left: 0;
+        height: calc(100vh - 77px);
+        transform: translateX(-100%);
+        z-index: 50;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    #sideNav.open {
+        transform: translateX(0);
+    }
+}
+
+header {
+    background-color: #1e293b;
+    color: white;
+}
+
+nav button[aria-current="page"] {
+    background-color: #10b981;
+    color: white;
+}
+
+nav button:hover {
+    background-color: #d1fae5;
+}
+
+table thead th {
+    background-color: #f3f4f6;
+    color: #1f2937;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+.text-red-500:hover {
+    text-decoration: underline;
+}
