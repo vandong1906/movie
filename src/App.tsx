@@ -7,7 +7,6 @@ import TheatersPage from '../src/components/TheatersPage/TheatersPage';
 import './App.css';
 import MovieTicket from './components/ticket/ticket';
 import Myticket from './components/ticket/myticket';
-
 import BookingDetail from "./components/seat/BookingDetail.tsx";
 import PaymentSuccess from "./components/seat/PaymentSuccess.tsx";
 import Register from './components/user/Register.tsx';
