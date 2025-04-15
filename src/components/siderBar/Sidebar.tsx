@@ -13,7 +13,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, navigate, handleLogout }) => 
     <nav
       className={`${
         isOpen ? "block" : "hidden"
-      } sm:block bg-gray-100 sm:bg-white border border-gray-300 w-[277px] transition-transform duration-300 ease-in-out fixed sm:static top-[77px] left-0 h-[calc(100vh-77px)] z-50`}
+      } sm:block bg-gray-100 sm:bg-white border border-gray-300 w-[250px] transition-transform duration-300 ease-in-out fixed sm:static top-[77px] left-0 h-[calc(100vh-77px)] z-50`}
     >
       <ul className="flex flex-col">
         <li>
