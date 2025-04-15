@@ -66,17 +66,25 @@ const TheatersPage: React.FC = () => {
         <button
           disabled={currentPage === 1}
           onClick={() => setCurrentPage((prev) => prev - 1)}
-          className="px-4 py-2 border rounded disabled:opacity-50"
+          className={`px-4 py-2 text-sm font-medium rounded ${
+            currentPage === 1
+              ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+              : "bg-blue-500 text-white hover:bg-blue-600"
+          }`}
         >
           Previous
         </button>
-        <span>
+        <span className="text-gray-700 font-medium">
           Page {currentPage} of {Math.ceil(theaters.length / theatersPerPage)}
         </span>
         <button
           disabled={currentPage === Math.ceil(theaters.length / theatersPerPage)}
           onClick={() => setCurrentPage((prev) => prev + 1)}
-          className="px-4 py-2 border rounded disabled:opacity-50"
+          className={`px-4 py-2 text-sm font-medium rounded ${
+            currentPage === Math.ceil(theaters.length / theatersPerPage)
+              ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+              : "bg-blue-500 text-white hover:bg-blue-600"
+          }`}
         >
           Next
         </button>

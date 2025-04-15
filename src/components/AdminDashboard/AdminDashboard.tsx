@@ -1,8 +1,9 @@
 // components/AdminDashboard.tsx
-import React, { useState } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
-import Sidebar from '../siderBar/Sidebar'; // Adjust the import path as necessary
-import './inde.css'
+import React, { useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
+import Sidebar from "../siderBar/Sidebar";
+import "./inde.css";
+
 const AdminDashboard: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
@@ -11,12 +12,11 @@ const AdminDashboard: React.FC = () => {
 
   const handleLogout = () => {
     console.log("Logging out...");
-    
   };
 
   const handleNavigate = (page: string) => {
     navigate(`/${page}`);
-    setIsMobileMenuOpen(false); 
+    setIsMobileMenuOpen(false);
   };
 
   return (
@@ -50,7 +50,7 @@ const AdminDashboard: React.FC = () => {
           handleLogout={handleLogout}
         />
         <main className="flex-1 p-4 sm:p-6 bg-gray-50 sm:bg-gray-100">
-          <Outlet /> 
+          <Outlet />
         </main>
       </div>
     </>

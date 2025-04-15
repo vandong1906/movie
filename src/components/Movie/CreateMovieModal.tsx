@@ -78,35 +78,41 @@ const CreateMovieModal: React.FC<CreateMovieModalProps> = ({ movie, onClose, onS
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
-      <div className="bg-white p-6 rounded-lg max-w-[500px] w-[90%]">
-        <h2 className="text-xl sm:text-2xl font-medium mb-5">
+      <div className="bg-white p-6 rounded-lg max-w-[500px] w-[90%] shadow-lg">
+        <h2 className="text-xl sm:text-2xl font-medium mb-5 text-gray-800">
           {editingMovieId ? "Edit Movie" : "Create New Movie"}
         </h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="movie_name" className="block text-sm mb-2">Movie Name</label>
+            <label htmlFor="movie_name" className="block text-sm font-medium text-gray-700 mb-2">
+              Movie Name
+            </label>
             <input
               id="movie_name"
               type="text"
-              className="w-full p-2 text-sm border border-gray-300 rounded"
+              className="w-full p-2 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
               value={movieName}
               onChange={(e) => setMovieName(e.target.value)}
               required
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="genre" className="block text-sm mb-2">Genre</label>
+            <label htmlFor="genre" className="block text-sm font-medium text-gray-700 mb-2">
+              Genre
+            </label>
             <input
               id="genre"
               type="text"
-              className="w-full p-2 text-sm border border-gray-300 rounded"
+              className="w-full p-2 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
               value={genre}
               onChange={(e) => setGenre(e.target.value)}
               required
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="cover" className="block text-sm mb-2">Cover Image</label>
+            <label htmlFor="cover" className="block text-sm font-medium text-gray-700 mb-2">
+              Cover Image
+            </label>
             <div className="flex items-center">
               <label
                 htmlFor="cover"
@@ -126,13 +132,15 @@ const CreateMovieModal: React.FC<CreateMovieModalProps> = ({ movie, onClose, onS
             />
           </div>
           <div className="mb-6">
-            <label htmlFor="duration" className="block text-sm mb-2">Duration (e.g., 2h 30m)</label>
+            <label htmlFor="duration" className="block text-sm font-medium text-gray-700 mb-2">
+              Duration (e.g., 2h 30m)
+            </label>
             <input
               id="duration"
               type="text"
               pattern="^[0-9]+h [0-9]+m$"
               title="Please use format: 2h 30m"
-              className="w-full p-2 text-sm border border-gray-300 rounded"
+              className="w-full p-2 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
               value={duration}
               onChange={(e) => setDuration(e.target.value)}
               required
@@ -141,7 +149,7 @@ const CreateMovieModal: React.FC<CreateMovieModalProps> = ({ movie, onClose, onS
           <div className="flex justify-end gap-3">
             <button
               type="button"
-              className="px-4 py-2 text-sm border border-gray-300 rounded hover:bg-gray-100"
+              className="px-4 py-2 text-sm border border-gray-300 rounded text-gray-700 hover:bg-gray-100"
               onClick={onClose}
             >
               Cancel

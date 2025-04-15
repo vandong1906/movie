@@ -116,17 +116,31 @@ const AdminShows: React.FC = () => {
     try {
       const res = await fetch(`${TICKETS_API_URL}/show/${id}`);
       const data = await res.json();
+
+      if (!Array.isArray(data)) {
+        setTickets([]); // Ensure tickets is an array
+        alert("No tickets available for this show.");
+        return;
+      }
+
+      if (data.length === 0) {
+        setTickets([]); // Handle empty tickets
+        alert("No tickets available for this show.");
+        return;
+      }
+
       setTickets(data);
       setTicketsPage(1); // Reset tickets pagination to the first page
       setModals((prev) => ({ ...prev, view: true }));
     } catch (err) {
+      console.error("Error fetching tickets:", err);
       alert("Failed to fetch tickets");
     }
   };
 
   const indexOfLastTicket = ticketsPage * ticketsPerPage;
   const indexOfFirstTicket = indexOfLastTicket - ticketsPerPage;
-  const currentTickets = tickets.slice(indexOfFirstTicket, indexOfLastTicket);
+  const currentTickets = Array.isArray(tickets) ? tickets.slice(indexOfFirstTicket, indexOfLastTicket) : [];
 
   const handleTicketsPagination = (direction: "next" | "prev") => {
     if (direction === "next" && ticketsPage < Math.ceil(tickets.length / ticketsPerPage)) {
@@ -143,7 +157,10 @@ const AdminShows: React.FC = () => {
   return (
     <div className="p-4 sm:p-6">
       <div className="flex justify-end mb-6">
-        <button className="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg" onClick={openCreateModal}>
+        <button
+          className="px-4 py-2 text-sm font-medium text-white bg-teal-500 rounded-lg hover:bg-teal-600"
+          onClick={openCreateModal}
+        >
           + Create New
         </button>
       </div>
@@ -165,9 +182,24 @@ const AdminShows: React.FC = () => {
               <td className="p-2 border">{theaterMap[show.theater_id] || "N/A"}</td>
               <td className="p-2 border">{show.show_time}</td>
               <td className="p-2 border text-center">
-                <button className="text-green-500 mr-2" onClick={() => viewTickets(show.show_id)}>View</button>
-                <button className="text-blue-500 mr-2" onClick={() => openEditModal(show.show_id)}>Edit</button>
-                <button className="text-red-500" onClick={() => openDeleteModal(show.show_id)}>Delete</button>
+                <button
+                  className="px-3 py-1 text-sm font-medium text-white bg-green-500 rounded hover:bg-green-600 mr-2"
+                  onClick={() => viewTickets(show.show_id)}
+                >
+                  View
+                </button>
+                <button
+                  className="px-3 py-1 text-sm font-medium text-white bg-blue-500 rounded hover:bg-blue-600 mr-2"
+                  onClick={() => openEditModal(show.show_id)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="px-3 py-1 text-sm font-medium text-white bg-red-500 rounded hover:bg-red-600"
+                  onClick={() => openDeleteModal(show.show_id)}
+                >
+                  Delete
+                </button>
               </td>
             </tr>
           ))}
@@ -178,7 +210,7 @@ const AdminShows: React.FC = () => {
         <button
           disabled={currentPage === 1}
           onClick={() => setCurrentPage((prev) => prev - 1)}
-          className="px-4 py-2 border rounded disabled:opacity-50"
+          className="px-4 py-2 text-sm font-medium text-white bg-gray-500 rounded-lg hover:bg-gray-600 disabled:opacity-50"
         >
           Previous
         </button>
@@ -188,7 +220,7 @@ const AdminShows: React.FC = () => {
         <button
           disabled={currentPage === Math.ceil(shows.length / showsPerPage)}
           onClick={() => setCurrentPage((prev) => prev + 1)}
-          className="px-4 py-2 border rounded disabled:opacity-50"
+          className="px-4 py-2 text-sm font-medium text-white bg-gray-500 rounded-lg hover:bg-gray-600 disabled:opacity-50"
         >
           Next
         </button>
@@ -241,10 +273,17 @@ const AdminShows: React.FC = () => {
               />
             </div>
             <div className="flex justify-end gap-3">
-              <button type="button" className="border p-2 rounded" onClick={() => setModals({ ...modals, create: false })}>
+              <button
+                type="button"
+                className="px-3 py-1 text-sm font-medium text-gray-700 bg-gray-300 rounded hover:bg-gray-400"
+                onClick={() => setModals({ ...modals, create: false })}
+              >
                 Cancel
               </button>
-              <button type="submit" className="bg-blue-500 text-white p-2 rounded">
+              <button
+                type="submit"
+                className="px-3 py-1 text-sm font-medium text-white bg-teal-500 rounded hover:bg-teal-600"
+              >
                 {editingShowId ? "Update Show" : "Create Show"}
               </button>
             </div>
@@ -259,10 +298,16 @@ const AdminShows: React.FC = () => {
             <h2 className="text-xl mb-4">Confirm Deletion</h2>
             <p>Are you sure you want to delete this show?</p>
             <div className="flex justify-end gap-3 mt-4">
-              <button className="border p-2 rounded" onClick={() => setModals({ ...modals, delete: false })}>
+              <button
+                className="px-3 py-1 text-sm font-medium text-gray-700 bg-gray-300 rounded hover:bg-gray-400"
+                onClick={() => setModals({ ...modals, delete: false })}
+              >
                 Cancel
               </button>
-              <button className="bg-red-500 text-white p-2 rounded" onClick={confirmDelete}>
+              <button
+                className="px-3 py-1 text-sm font-medium text-white bg-red-500 rounded hover:bg-red-600"
+                onClick={confirmDelete}
+              >
                 Delete
               </button>
             </div>
@@ -286,15 +331,23 @@ const AdminShows: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {currentTickets.map((ticket, i) => (
-                  <tr key={i}>
-                    <td className="p-2 border">{indexOfFirstTicket + i + 1}</td>
-                    <td className="p-2 border">{ticket.user_id}</td>
-                    <td className="p-2 border">{ticket.seat_number}</td>
-                    <td className="p-2 border">{ticket.price}</td>
-                    <td className="p-2 border">{ticket.status}</td>
+                {currentTickets.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} className="p-4 text-center text-gray-500">
+                      No tickets available.
+                    </td>
                   </tr>
-                ))}
+                ) : (
+                  currentTickets.map((ticket, i) => (
+                    <tr key={i}>
+                      <td className="p-2 border">{indexOfFirstTicket + i + 1}</td>
+                      <td className="p-2 border">{ticket.user_id}</td>
+                      <td className="p-2 border">{ticket.seat_number}</td>
+                      <td className="p-2 border">{ticket.price}</td>
+                      <td className="p-2 border">{ticket.status}</td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
 

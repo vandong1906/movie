@@ -25,48 +25,56 @@ const ShowsTable: React.FC<ShowsTableProps> = ({ shows, movies, theaters, onCrea
     <>
       <div className="flex justify-end mb-6">
         <button
-          className="px-4 py-2 text-sm sm:text-base font-medium text-white bg-blue-500 rounded-lg transition-all cursor-pointer duration-200 ease-in-out hover:bg-blue-600"
+          className="px-4 py-2 text-sm sm:text-base font-medium text-white bg-teal-500 rounded-lg transition-all cursor-pointer duration-200 ease-in-out hover:bg-teal-600"
           onClick={onCreate}
         >
           + Create New
         </button>
       </div>
       <div className="overflow-x-auto w-full">
-        <table className="w-full border-collapse">
+        <table className="w-full border-collapse shadow-lg">
           <thead>
-            <tr>
-              <th className="p-1.5 text-xs sm:text-sm text-left border-black border-[0.4px] bg-gray-200 text-gray-800">#</th>
-              <th className="p-1.5 text-xs sm:text-sm text-left border-black border-[0.4px] bg-gray-200 text-gray-800">Movie</th>
-              <th className="p-1.5 text-xs sm:text-sm text-left border-black border-[0.4px] bg-gray-200 text-gray-800">Theater</th>
-              <th className="p-1.5 text-xs sm:text-sm text-left border-black border-[0.4px] bg-gray-200 text-gray-800">Show Time</th>
-              <th className="p-1.5 text-xs sm:text-sm text-center border-black border-[0.4px] bg-gray-200 text-gray-800">Actions</th>
+            <tr className="bg-gray-100 text-gray-800">
+              <th className="p-2 text-xs sm:text-sm text-left border border-gray-300">#</th>
+              <th className="p-2 text-xs sm:text-sm text-left border border-gray-300">Movie</th>
+              <th className="p-2 text-xs sm:text-sm text-left border border-gray-300">Theater</th>
+              <th className="p-2 text-xs sm:text-sm text-left border border-gray-300">Show Time</th>
+              <th className="p-2 text-xs sm:text-sm text-center border border-gray-300">Actions</th>
             </tr>
           </thead>
           <tbody>
             {shows.length === 0 ? (
               <tr>
-                <td colSpan={10} className="text-center p-4 text-gray-500">
+                <td colSpan={5} className="text-center p-4 text-gray-500">
                   No shows available.
                 </td>
               </tr>
             ) : (
               shows.map((show, index) => (
-                <tr key={show.show_id}>
-                  <td className="p-1.5 text-xs text-left border-solid border-[0.4px] border-black">{index + 1}</td>
-                  <td className="p-1.5 text-xs text-left border-solid border-[0.4px] border-black">{movieMap[show.movie_id] || "N/A"}</td>
-                  <td className="p-1.5 text-xs text-left border-solid border-[0.4px] border-black">{theaterMap[show.theater_id] || "N/A"}</td>
-                  <td className="p-1.5 text-xs text-left border-solid border-[0.4px] border-black">{show.show_time || "N/A"}</td>
-                  <td className="p-1.5 text-xs text-center border-solid border-[0.4px] border-black">
+                <tr key={show.show_id} className="hover:bg-gray-50 transition-colors duration-200">
+                  <td className="p-2 text-xs sm:text-sm text-left border border-gray-300">
+                    {index + 1}
+                  </td>
+                  <td className="p-2 text-xs sm:text-sm text-left border border-gray-300">
+                    {movieMap[show.movie_id] || "N/A"}
+                  </td>
+                  <td className="p-2 text-xs sm:text-sm text-left border border-gray-300">
+                    {theaterMap[show.theater_id] || "N/A"}
+                  </td>
+                  <td className="p-2 text-xs sm:text-sm text-left border border-gray-300">
+                    {show.show_time || "N/A"}
+                  </td>
+                  <td className="p-2 text-xs sm:text-sm text-center border border-gray-300">
                     <div className="flex justify-center gap-2">
                       <button
-                        className="text-blue-500 hover:underline"
+                        className="px-3 py-1 text-sm font-medium text-white bg-blue-500 rounded hover:bg-blue-600"
                         onClick={() => onEdit(show.show_id)}
                         aria-label="Edit Movie Show"
                       >
                         Edit
                       </button>
                       <button
-                        className="text-red-500 hover:underline"
+                        className="px-3 py-1 text-sm font-medium text-white bg-red-500 rounded hover:bg-red-600"
                         onClick={() => onDelete(show.show_id)}
                         aria-label="Delete Movie Show"
                       >

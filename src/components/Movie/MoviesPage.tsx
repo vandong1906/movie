@@ -68,17 +68,25 @@ const MoviesPage: React.FC = () => {
         <button
           disabled={currentPage === 1}
           onClick={() => setCurrentPage((prev) => prev - 1)}
-          className="px-4 py-2 border rounded disabled:opacity-50"
+          className={`px-4 py-2 text-sm font-medium rounded ${
+            currentPage === 1
+              ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+              : "bg-teal-500 text-white hover:bg-teal-600"
+          }`}
         >
           Previous
         </button>
-        <span>
+        <span className="text-gray-700 font-medium">
           Page {currentPage} of {Math.ceil(movies.length / moviesPerPage)}
         </span>
         <button
           disabled={currentPage === Math.ceil(movies.length / moviesPerPage)}
           onClick={() => setCurrentPage((prev) => prev + 1)}
-          className="px-4 py-2 border rounded disabled:opacity-50"
+          className={`px-4 py-2 text-sm font-medium rounded ${
+            currentPage === Math.ceil(movies.length / moviesPerPage)
+              ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+              : "bg-teal-500 text-white hover:bg-teal-600"
+          }`}
         >
           Next
         </button>
