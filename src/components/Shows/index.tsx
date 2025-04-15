@@ -116,17 +116,31 @@ const AdminShows: React.FC = () => {
     try {
       const res = await fetch(`${TICKETS_API_URL}/show/${id}`);
       const data = await res.json();
+
+      if (!Array.isArray(data)) {
+        setTickets([]); // Ensure tickets is an array
+        alert("No tickets available for this show.");
+        return;
+      }
+
+      if (data.length === 0) {
+        setTickets([]); // Handle empty tickets
+        alert("No tickets available for this show.");
+        return;
+      }
+
       setTickets(data);
       setTicketsPage(1); // Reset tickets pagination to the first page
       setModals((prev) => ({ ...prev, view: true }));
     } catch (err) {
+      console.error("Error fetching tickets:", err);
       alert("Failed to fetch tickets");
     }
   };
 
   const indexOfLastTicket = ticketsPage * ticketsPerPage;
   const indexOfFirstTicket = indexOfLastTicket - ticketsPerPage;
-  const currentTickets = tickets.slice(indexOfFirstTicket, indexOfLastTicket);
+  const currentTickets = Array.isArray(tickets) ? tickets.slice(indexOfFirstTicket, indexOfLastTicket) : [];
 
   const handleTicketsPagination = (direction: "next" | "prev") => {
     if (direction === "next" && ticketsPage < Math.ceil(tickets.length / ticketsPerPage)) {
@@ -286,15 +300,23 @@ const AdminShows: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {currentTickets.map((ticket, i) => (
-                  <tr key={i}>
-                    <td className="p-2 border">{indexOfFirstTicket + i + 1}</td>
-                    <td className="p-2 border">{ticket.user_id}</td>
-                    <td className="p-2 border">{ticket.seat_number}</td>
-                    <td className="p-2 border">{ticket.price}</td>
-                    <td className="p-2 border">{ticket.status}</td>
+                {currentTickets.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} className="p-4 text-center text-gray-500">
+                      No tickets available.
+                    </td>
                   </tr>
-                ))}
+                ) : (
+                  currentTickets.map((ticket, i) => (
+                    <tr key={i}>
+                      <td className="p-2 border">{indexOfFirstTicket + i + 1}</td>
+                      <td className="p-2 border">{ticket.user_id}</td>
+                      <td className="p-2 border">{ticket.seat_number}</td>
+                      <td className="p-2 border">{ticket.price}</td>
+                      <td className="p-2 border">{ticket.status}</td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
 
