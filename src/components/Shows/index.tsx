@@ -14,7 +14,8 @@ const AdminShows: React.FC = () => {
   const [form, setForm] = useState({ movie_id: "", theater_id: "", show_time: "" });
   const [tickets, setTickets] = useState<any[]>([]);
   const [modals, setModals] = useState({ create: false, delete: false, view: false });
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1); // For shows pagination
+  const [ticketsPage, setTicketsPage] = useState(1); // For tickets pagination
   const ticketsPerPage = 10; // Number of tickets per page
   const showsPerPage = 10; // Number of shows per page
 
@@ -116,16 +117,24 @@ const AdminShows: React.FC = () => {
       const res = await fetch(`${TICKETS_API_URL}/show/${id}`);
       const data = await res.json();
       setTickets(data);
-      setCurrentPage(1); // Reset to the first page
+      setTicketsPage(1); // Reset tickets pagination to the first page
       setModals((prev) => ({ ...prev, view: true }));
     } catch (err) {
       alert("Failed to fetch tickets");
     }
   };
 
-  const indexOfLastTicket = currentPage * ticketsPerPage;
+  const indexOfLastTicket = ticketsPage * ticketsPerPage;
   const indexOfFirstTicket = indexOfLastTicket - ticketsPerPage;
   const currentTickets = tickets.slice(indexOfFirstTicket, indexOfLastTicket);
+
+  const handleTicketsPagination = (direction: "next" | "prev") => {
+    if (direction === "next" && ticketsPage < Math.ceil(tickets.length / ticketsPerPage)) {
+      setTicketsPage((prev) => prev + 1);
+    } else if (direction === "prev" && ticketsPage > 1) {
+      setTicketsPage((prev) => prev - 1);
+    }
+  };
 
   const indexOfLastShow = currentPage * showsPerPage;
   const indexOfFirstShow = indexOfLastShow - showsPerPage;
@@ -288,27 +297,36 @@ const AdminShows: React.FC = () => {
                 ))}
               </tbody>
             </table>
+
+            {/* Tickets Pagination */}
             <div className="flex justify-between items-center mt-4">
               <button
-                disabled={currentPage === 1}
-                onClick={() => setCurrentPage((prev) => prev - 1)}
+                disabled={ticketsPage === 1}
+                onClick={() => handleTicketsPagination("prev")}
                 className="px-4 py-2 border rounded disabled:opacity-50"
               >
                 Previous
               </button>
               <span>
-                Page {currentPage} of {Math.ceil(tickets.length / ticketsPerPage)}
+                Page {ticketsPage} of {Math.ceil(tickets.length / ticketsPerPage)}
               </span>
               <button
-                disabled={currentPage === Math.ceil(tickets.length / ticketsPerPage)}
-                onClick={() => setCurrentPage((prev) => prev + 1)}
+                disabled={ticketsPage === Math.ceil(tickets.length / ticketsPerPage)}
+                onClick={() => handleTicketsPagination("next")}
                 className="px-4 py-2 border rounded disabled:opacity-50"
               >
                 Next
               </button>
             </div>
+
             <div className="flex justify-end mt-4">
-              <button className="border p-2 rounded" onClick={() => setModals({ ...modals, view: false })}>
+              <button
+                className="border p-2 rounded"
+                onClick={() => {
+                  setModals({ ...modals, view: false }); // Close the modal
+                  fetchShows(); // Refresh the shows
+                }}
+              >
                 Close
               </button>
             </div>
