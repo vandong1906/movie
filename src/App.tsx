@@ -1,6 +1,10 @@
-// App.tsx
-import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import React, { JSX } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import AdminDashboard from "../src/components/AdminDashboard/AdminDashboard";
 import MoviesPage from "../src/components/Movie/MoviesPage";
 import TheatersPage from "../src/components/TheatersPage/TheatersPage";
@@ -16,36 +20,31 @@ import Login from "./components/user/Login.tsx";
 import SeatSelection from "./components/seat/SeatSelection.tsx";
 import AdminShows from "./components/Shows";
 import AdminTickets from "./components/ticketAdmin/TicketAdmin.tsx";
+import { useAuth } from "./components/hook/AuthenContext.tsx";
 
-// interface User {
- 
-//   user_id?: string;
-//   User_name?: string;
-//   role?:string
-// }
+const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
+  const { user, isLoggedIn } = useAuth();
+  const userRole = user?.role || "";
+
+  if (!isLoggedIn || !user || userRole !== "admin") {
+    return <Navigate to="/login" />;
+  }
+
+  return children;
+};
+
 const App: React.FC = () => {
-  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-const userRole="admin";
-  // useEffect(() => {
-  //   const storedUser = localStorage.getItem('user');
-  //   if (storedUser) {
-  //     console.log(JSON.parse(storedUser) )
-  //     setUser(JSON.parse(storedUser) as User);
-  //   } else {
-  //     setUser(null);
-  //   }
-  // }, []); 
-  // const userRole = User ? User.role : '';
   return (
     <Router>
       <Routes>
-        <Route path="/admin/"  element={
-            isLoggedIn && userRole === 'admin' ? (
+        <Route
+          path="/admin/"
+          element={
+            <ProtectedRoute>
               <AdminDashboard />
-            ) : (
-              <Navigate to="/login" />
-            )
-          } >
+            </ProtectedRoute>
+          }
+        >
           <Route index element={<MoviesPage />} />
           <Route path="movies" element={<MoviesPage />} />
           <Route path="theaters" element={<TheatersPage />} />

@@ -5,6 +5,8 @@ import axios from 'axios';
 import eyeIcon from '../../assets/eye.png';
 import blockIcon from '../../assets/block.png';
 import googleIcon from '../../assets/google-login.png';
+import { useAuth } from '../hook/AuthenContext';
+
 
 // Define interface for user data
 interface User {
@@ -18,6 +20,7 @@ const Login: React.FC = () => {
   const [error, setError] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
+  const { login,user } = useAuth();
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -27,25 +30,23 @@ const Login: React.FC = () => {
       return;
     }
     try {
-      const res = await axios.post<{ role: string; user?: User }>(
+      const res = await axios.post<{ role: string; id?: User }>(
         'https://backendmovie-10gn.onrender.com/api/admins/login',
         { email, password }
       );
-
+     
       const validRole = res.data.role === 'admin' ? 'admin' : 'user';
-      localStorage.setItem('isLoggedIn', 'true');
-      if (res.data.user) {
-        localStorage.setItem(
-          'user',
-          JSON.stringify({
-            ...res.data.user,
-            user_id: res.data.user.user_id || null,
-            role: validRole,
-          })
-        );
+      console.log(res.data.id)
+      if (res.data.id) {
+        login({
+          user_id: res.data.id ? String(res.data.id) : null,
+          role: validRole,
+        });
       }
+      console.log(validRole);
+      console.log(user);
       if (validRole === 'admin') {
-        navigate('/admindashboard');
+        navigate('/admin');
       } else {
         navigate('/home');
       }
@@ -90,7 +91,7 @@ const Login: React.FC = () => {
         </div>
 
         {error && <p className="text-red-500 text-sm">{error}</p>}
-<button type="submit" className="create-button">
+        <button type="submit" className="create-button">
           Login now
         </button>
 
