@@ -51,7 +51,10 @@ const MoviesPage: React.FC = () => {
         }}
         onDelete={(id) => {
           if (window.confirm("Are you sure you want to delete this movie?")) {
-            fetch(`${API_BASE_URL}/${id}`, { method: "DELETE" })
+            fetch(`${API_BASE_URL}/${id}`, {
+              method: "DELETE",
+              credentials: "include", // Include cookies in the request
+            })
               .then((response) => {
                 if (!response.ok) throw new Error("Failed to delete");
                 fetchMovies();

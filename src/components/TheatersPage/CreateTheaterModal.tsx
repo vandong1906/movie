@@ -42,6 +42,7 @@ const CreateTheaterModal: React.FC<CreateTheaterModalProps> = ({ theater, onClos
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include", // Include cookies in the request
           body: JSON.stringify({
             theater_name: theaterName,
             location: location,
@@ -50,14 +51,15 @@ const CreateTheaterModal: React.FC<CreateTheaterModalProps> = ({ theater, onClos
       );
 
       if (!response.ok) {
-        throw new Error(editingTheaterId ? "Failed to update theater" : "Failed to create theater");
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to save theater");
       }
 
       alert(editingTheaterId ? "Theater updated successfully!" : "Theater created successfully!");
       onSave();
     } catch (error) {
       console.error("Error saving theater:", error);
-      alert(editingTheaterId ? "Failed to update theater" : "Failed to create theater");
+      alert("Failed to save theater. Please try again.");
     }
   };
 

@@ -12,6 +12,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+<<<<<<< HEAD
 
 body {
   margin: 0;
@@ -90,3 +91,6 @@ span{
   font-weight: 500;
 }
 @import "tailwindcss";
+=======
+@import "tailwindcss";
+>>>>>>> 6533eb2 (fix authe)

@@ -51,6 +51,7 @@ const CreateMovieModal: React.FC<CreateMovieModalProps> = ({ movie, onClose, onS
         editingMovieId ? `${API_BASE_URL}/${editingMovieId}` : API_BASE_URL,
         {
           method: editingMovieId ? "PUT" : "POST",
+          credentials: "include", // Include cookies in the request
           body: formData,
         }
       );

@@ -87,7 +87,10 @@ const AdminShows: React.FC = () => {
   const confirmDelete = async () => {
     if (!showIdToDelete) return;
     try {
-      await fetch(`${SHOWS_API_URL}/${showIdToDelete}`, { method: "DELETE" });
+      await fetch(`${SHOWS_API_URL}/${showIdToDelete}`, {
+        method: "DELETE",
+        credentials: "include", // Include cookies in the request
+      });
       fetchShows();
       setModals((prev) => ({ ...prev, delete: false }));
     } catch (err) {
@@ -103,6 +106,7 @@ const AdminShows: React.FC = () => {
       await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
+        credentials: "include", // Include cookies in the request
         body: JSON.stringify(form),
       });
       fetchShows();
