@@ -32,7 +32,7 @@ const Login: React.FC = () => {
     try {
       const res = await axios.post<{ role: string; id?: User }>(
         'https://backendmovie-10gn.onrender.com/api/admins/login',
-        { email, password }
+        { email, password }, { withCredentials: true },
       );
      
       const validRole = res.data.role === 'admin' ? 'admin' : 'user';
