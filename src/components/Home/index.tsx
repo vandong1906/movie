@@ -1,19 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import logo from '../../assets/logoweb.png';
 
+// Define interface for Movie
 interface Movie {
-  movie_id: string;
+  movie_id: number;
   movie_name: string;
   path: string;
 }
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  const isLoggedIn: boolean = localStorage.getItem('isLoggedIn') === 'true';
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
   const [movies, setMovies] = useState<Movie[]>([]);
 
-  const handleMovieClick = (movieId: string) => {
+  const handleMovieClick = (movieId: number) => {
     navigate(`/movie/${movieId}`);
   };
 
@@ -27,7 +29,7 @@ const Home: React.FC = () => {
   };
 
   const handleRegister = () => {
-    navigate('/register');
+    navigate('/');
   };
 
   useEffect(() => {
@@ -43,17 +45,26 @@ const Home: React.FC = () => {
     fetchMovies();
   }, []);
 
-  console.log('Movies:', movies);
-
   return (
     <div className="home-container">
       <div className="header">
-        <img className="logo-home" src="/images/logoweb.png" alt="Film" />
+        <img
+          className="logo-home"
+          src={logo}
+          alt="Film"
+          onClick={() => navigate('/home')}
+          style={{ cursor: 'pointer' }}
+        />
         <div className="auth-buttons">
           {isLoggedIn ? (
-            <button onClick={handleLogout} className="logout-button">
-              Log Out
-            </button>
+            <>
+              <button onClick={() => navigate('/my-ticket')} className="ticket-button">
+                My Ticket
+              </button>
+              <button onClick={handleLogout} className="logout-button">
+                Logout
+              </button>
+            </>
           ) : (
             <>
               <button onClick={handleLogin} className="auth-button">

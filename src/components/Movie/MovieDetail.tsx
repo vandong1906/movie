@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
+import logo from '../../assets/logoweb.png'
+import backtohome from '../../assets/back-to-home.png'
 interface Movie {
   movie_id: string;
   movie_name: string;
@@ -111,14 +112,14 @@ const MovieDetail: React.FC = () => {
     <div className="movie-detail-container">
       <header className="header">
         <div className="logo-section">
-          <img className="logo-home" src="/images/logoweb.png" alt="Film" />
+          <img className="logo-home" src={logo} alt="Film" />
         </div>
         <button className="logout-button" onClick={handleLogout}>
           Log Out
         </button>
       </header>
       <button className="back-to-home-button" onClick={handleBackToHome}>
-        <img src="/images/back-to-home.png" alt="Back" className="back-icon" />
+        <img src={backtohome} alt="Back" className="back-icon" />
       </button>
       <div className="movie-detail-content">
         <div className="selection-section">
