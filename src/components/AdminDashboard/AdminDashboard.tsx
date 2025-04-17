@@ -11,7 +11,13 @@ const AdminDashboard: React.FC = () => {
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
   const handleLogout = () => {
-    console.log("Logging out...");
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("user");
+    document.cookie = "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+    // Chuyển hướng về trang login
+    navigate("/login");
   };
 
   const handleNavigate = (page: string) => {
