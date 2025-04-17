@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './index.css'
+import logo from '../../assets/logoweb.png'
 interface AuthLayoutProps {
   title: string;
   showLoginLink?: boolean;
@@ -12,7 +13,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ title, showLoginLink, showRegis
   return (
     <div className="min-h-screen flex">
       <div className="left-section">
-        <img className="logo-home" src="/images/logoweb.png" alt="Film" />
+        <img className="logo-home" src={logo} alt="Film" />
         <div className="welcome-text">
           <h2>Welcome.</h2>
           <h2>Begin your cinematic adventure now with our ticketing platform!</h2>

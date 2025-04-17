@@ -1,29 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AuthLayout from '../user/AuthLayout';
+import AuthLayout from './AuthLayout';
 import axios from 'axios';
+import eyeIcon from '../../assets/eye.png';
+import blockIcon from '../../assets/block.png';
 
 const Register: React.FC = () => {
-  const [email, setUserName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPass, setConfirmPass] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleRegister = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
-    console.log(password,"    0",email)
+
     if (password !== confirmPass) {
       setError("Passwords don't match");
       return;
     }
- 
-
     try {
       const res = await axios.post('https://backendmovie-10gn.onrender.com/api/admins', {
-        email: email,
+        email,
         password,
       });
 
@@ -43,12 +43,11 @@ const Register: React.FC = () => {
           id="email"
           type="email"
           value={email}
-          onChange={(e) => setUserName(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
           placeholder="@gmail.com"
           required
           className="w-full p-2 border rounded"
         />
-
         <label htmlFor="password">Password</label>
         <div className="password-container relative">
           <input
@@ -61,7 +60,7 @@ const Register: React.FC = () => {
             className="w-full p-2 border rounded"
           />
           <img
-            src={showPassword ? '/images/block.png' : '/images/eye.png'}
+            src={showPassword ? blockIcon : eyeIcon}
             alt="Toggle Password"
             className="eye-icon absolute right-2 top-2 w-5 h-5"
             onClick={() => setShowPassword(!showPassword)}
@@ -81,10 +80,10 @@ const Register: React.FC = () => {
             className="w-full p-2 border rounded"
           />
           <img
-            src={showPassword ? '/images/block.png' : '/images/eye.png'}
+            src={showPassword ? blockIcon : eyeIcon}
             alt="Toggle Password"
             className="eye-icon absolute right-2 top-2 w-5 h-5"
-            onClick={() => setShowPassword(!showPassword)}
+onClick={() => setShowPassword(!showPassword)}
             style={{ cursor: 'pointer' }}
           />
         </div>
