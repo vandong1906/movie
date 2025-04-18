@@ -1,132 +1,195 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+
+import React, { useState, useEffect, JSX } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import './seat.css';
+
+interface Ticket {
+  seat_number: string;
+}
+
+interface TicketResponse {
+  ticket_id: string;
+}
 
 const SeatSelection: React.FC = () => {
-  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const showId = searchParams.get('show_id') || '1';
+  const userId = searchParams.get('id_user') || '1';
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
-  const rows: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
-  const cols: number = 10;
-  const seatPrice: number = 70000;
-  const serviceFeeRate: number = 0.06;
-  const showId: number = 1;
+  const [bookedSeats, setBookedSeats] = useState<string[]>([]);
+  const seatPrice = 70000;
+  const serviceFeeRate = 0.06;
+  const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+  const cols = 10;
+
+  useEffect(() => {
+    const fetchBookedSeats = async () => {
+      try {
+        const res = await fetch(`https://backendmovie-10gn.onrender.com/api/tickets?show_id=${showId}`);
+        const data: Ticket[] = await res.json();
+        setBookedSeats(data.map(ticket => ticket.seat_number));
+      } catch (error) {
+        console.error('Lỗi khi lấy danh sách ghế đã mua:', error);
+      }
+    };
+
+    fetchBookedSeats();
+  }, [showId]);
 
   const formatCurrencyVND = (amount: number): string => {
-    return amount.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
-  };
-
-  const calculateTotals = () => {
-    const baseTotal = selectedSeats.length * seatPrice;
-    const serviceFee = baseTotal * serviceFeeRate;
-    const totalWithFee = baseTotal + serviceFee;
-    return { baseTotal, serviceFee, totalWithFee };
+    return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
   };
 
   const handleSeatClick = (seatNumber: string) => {
-    setSelectedSeats(prev =>
-      prev.includes(seatNumber)
-        ? prev.filter(seat => seat !== seatNumber)
-        : [...prev, seatNumber]
-    );
+    if (selectedSeats.includes(seatNumber)) {
+      setSelectedSeats(selectedSeats.filter(seat => seat !== seatNumber));
+    } else {
+      setSelectedSeats([...selectedSeats, seatNumber]);
+    }
   };
 
-  const clearSelection = () => {
+  const handleClearSelection = () => {
     setSelectedSeats([]);
   };
 
   const handleProceed = async () => {
     if (selectedSeats.length === 0) {
-      alert("Vui lòng chọn ghế!");
+      alert('Vui lòng chọn ghế!');
       return;
     }
 
+    const baseTotal = selectedSeats.length * seatPrice;
+    const serviceFee = baseTotal * serviceFeeRate;
+    const total = baseTotal + serviceFee;
+
     try {
+      const orderInfo = `ORDER-${Date.now()}`;
+      const createdTicketIds: string[] = [];
+
       for (const seat of selectedSeats) {
-        const response = await fetch("https://backendmovie-10gn.onrender.com/api/tickets", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+        const res = await fetch('https://backendmovie-10gn.onrender.com/api/tickets', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
           body: JSON.stringify({
+            orderInfo,
             seat_number: seat,
             price: seatPrice,
             show_id: showId,
+            id_user: userId,
           }),
         });
 
-        if (!response.ok) {
-          const error = await response.json();
-          throw new Error(`Ghế ${seat}: ${error.message || response.statusText}`);
+        if (!res.ok) {
+          const error = await res.json();
+          throw new Error(`Không thể tạo vé cho ghế ${seat}: ${error.message || res.statusText}`);
         }
+
+        const result: TicketResponse = await res.json();
+        if (!result.ticket_id) {
+          throw new Error(`Phản hồi không hợp lệ cho ghế ${seat}`);
+        }
+
+        createdTicketIds.push(result.ticket_id);
       }
 
-      const { totalWithFee } = calculateTotals();
       const queryParams = new URLSearchParams({
-        show_id: showId.toString(),
-        seat_numbers: selectedSeats.join(","),
-        price: totalWithFee.toString(),
+        id_user: userId,
+        show_id: showId,
+        seat_numbers: selectedSeats.join(','),
+        price: total.toString(),
+        ticket_id: createdTicketIds.join(','),
+        order_info: orderInfo,
       }).toString();
 
-      navigate(`/booking?${queryParams}`);
+      window.location.href = `booking?${queryParams}`;
     } catch (error) {
-      console.error("Lỗi khi đặt vé:", error);
+      console.error('Lỗi khi đặt vé:', error);
       alert(`Lỗi đặt vé: ${(error as Error).message}`);
     }
   };
 
-  const { baseTotal, serviceFee, totalWithFee } = calculateTotals();
+  const renderSeats = () => {
+    const seats: JSX.Element[] = [];
+    rows.forEach(row => {
+      for (let i = 1; i <= cols; i++) {
+        const seatNumber = `${row}${i}`;
+        const isBooked = bookedSeats.includes(seatNumber);
+        const isSelected = selectedSeats.includes(seatNumber);
+        const buttonClass = isBooked
+          ? 'seat-button seat-booked'
+          : isSelected
+          ? 'seat-button seat-selected'
+          : 'seat-button seat-available';
+
+        seats.push(
+          <button
+            key={seatNumber}
+            className={buttonClass}
+            onClick={() => !isBooked && handleSeatClick(seatNumber)}
+            disabled={isBooked}
+          >
+            {seatNumber}
+          </button>
+        );
+      }
+    });
+    return seats;
+  };
+
+  const renderTotalPrice = () => {
+    const baseTotal = selectedSeats.length * seatPrice;
+    const serviceFee = baseTotal * serviceFeeRate;
+    const totalWithFee = baseTotal + serviceFee;
+
+    return (
+      <div>
+        <div>
+          {formatCurrencyVND(baseTotal)} <span className="footer-subtext">(vé)</span>
+        </div>
+        <div>
+          + {formatCurrencyVND(serviceFee)} <span className="footer-subtext">(phí 6%)</span>
+        </div>
+        <div className="footer-total">
+          {formatCurrencyVND(totalWithFee)} <span className="footer-subtext-total">(tổng)</span>
+        </div>
+      </div>
+    );
+  };
 
   return (
-    <div className="bg-gradient-to-br from-black to-green-900 text-white min-h-screen flex flex-col justify-between">
-      <div className="flex-1 flex flex-col items-center justify-center px-4 py-10">
-        <h2 className="text-2xl font-bold mb-6 self-start">Seat</h2>
-        <div className="grid grid-cols-10 gap-2 mb-8">
-          {rows.map(row =>
-            Array.from({ length: cols }, (_, i) => i + 1).map(col => {
-              const seatNumber = `${row}${col}`;
-              const isSelected = selectedSeats.includes(seatNumber);
-              return (
-                <button
-                  key={seatNumber}
-                  onClick={() => handleSeatClick(seatNumber)}
-                  className={`px-4 py-2 rounded transition hover:bg-gray-200 ${
-                    isSelected ? 'bg-green-500 text-white' : 'bg-white text-black'
-                  }`}
-                >
-                  {seatNumber}
-                </button>
-              );
-            })
-          )}
-        </div>
-        <button
-          onClick={clearSelection}
-          className="bg-white text-black px-8 py-2 rounded-full font-bold hover:bg-red-500 hover:text-white transition"
-        >
+    <div className="body-style">
+      {/* Main Seat Section */}
+      <div className="main-section">
+        <h2 className="heading-style">Seat</h2>
+        <div className="seat-grid">{renderSeats()}</div>
+        <button className="clear-button" onClick={handleClearSelection}>
           X
         </button>
       </div>
 
-      <div className="bg-black p-4 flex justify-between items-center text-white">
+      {/* Footer */}
+      <div className="footer">
         <div>
-          <p className="text-sm text-gray-400">Tổng tiền</p>
-          <div className="text-xl font-bold">
-            <div>{formatCurrencyVND(baseTotal)} <span className="text-sm text-gray-400">(vé)</span></div>
-            <div>+ {formatCurrencyVND(serviceFee)} <span className="text-sm text-gray-400">(phí 6%)</span></div>
-            <div className="font-bold text-green-400 mt-1">{formatCurrencyVND(totalWithFee)} <span className="text-sm text-gray-300">(tổng)</span></div>
-          </div>
+          <p className="footer-label">User ID</p>
+          <p className="footer-value user-id">#{userId}</p>
         </div>
         <div>
-          <p className="text-sm text-gray-400">Ghế</p>
-          <p className="text-xl font-bold">{selectedSeats.length > 0 ? selectedSeats.join(", ") : "None"}</p>
+          <p className="footer-label">Tổng tiền</p>
+          <p className="footer-price">{renderTotalPrice()}</p>
         </div>
         <div>
-          <p className="text-sm text-gray-400">SHOW ID</p>
-          <p className="text-xl font-bold">#{showId}</p>
+          <p className="footer-label">Ghế</p>
+          <p className="footer-seats">{selectedSeats.length > 0 ? selectedSeats.join(', ') : 'None'}</p>
         </div>
-        <div className="flex gap-4">
-          <button className="px-6 py-2 border border-white rounded">Quay lại</button>
-          <button
-            onClick={handleProceed}
-            className="px-6 py-2 bg-green-500 text-black font-semibold rounded hover:bg-green-400 transition"
-          >
+        <div>
+          <p className="footer-label">SHOW ID</p>
+          <p className="footer-show-id">#{showId}</p>
+        </div>
+        <div className="footer-buttons">
+          <button className="back-button">Quay lại</button>
+          <button className="proceed-button" onClick={handleProceed}>
             Đặt vé
           </button>
         </div>
@@ -136,3 +199,5 @@ const SeatSelection: React.FC = () => {
 };
 
 export default SeatSelection;
+
+

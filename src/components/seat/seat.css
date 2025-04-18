@@ -1,0 +1,176 @@
+/* Gradient background from black to green-900 */
+.bg-gradient {
+    background: linear-gradient(to bottom right, #000000, #14532d);
+  }
+  
+  /* Text color */
+  .text-white {
+    color: #ffffff;
+  }
+  
+  /* Minimum screen height and flex properties */
+  .min-h-screen {
+    min-height: 100vh;
+  }
+  
+  .flex {
+    display: flex;
+  }
+  
+  .flex-col {
+    flex-direction: column;
+  }
+  
+  .justify-between {
+    justify-content: space-between;
+  }
+  
+  /* Seat Section */
+  .seat-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 2.5rem;
+  }
+  
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    align-self: flex-start;
+  }
+  
+  /* Seat Grid */
+  .seat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  @media (min-width: 640px) {
+    .seat-grid {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .seat-grid {
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .seat-grid {
+      grid-template-columns: repeat(10, minmax(0, 1fr));
+    }
+  }
+  
+  /* Seat Buttons */
+  .seat-grid button {
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
+  }
+  
+  .seat-grid button.bg-white {
+    background-color: #ffffff;
+    color: #000000;
+  }
+  
+  .seat-grid button.bg-white:hover {
+    background-color: #e5e7eb;
+  }
+  
+  .seat-grid button.bg-green-500 {
+    background-color: #22c55e;
+    color: #ffffff;
+  }
+  
+  .seat-grid button.bg-gray-500 {
+    background-color: #6b7280;
+    color: #ffffff;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+  
+  /* Clear Button */
+  .clear-btn {
+    background-color: #ffffff;
+    color: #000000;
+    padding: 0.5rem 2rem;
+    border-radius: 9999px;
+    text-align: center;
+    font-weight: 700;
+    transition: all 0.2s ease;
+  }
+  
+  .clear-btn:hover {
+    background-color: #ef4444;
+    color: #ffffff;
+  }
+  
+  /* Footer */
+  .footer {
+    background-color: #000000;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #ffffff;
+  }
+  
+  .footer-label {
+    font-size: 0.875rem;
+    color: #9ca3af;
+  }
+  
+  .footer-value {
+    font-size: 0.875rem;
+    color: #86efac;
+    font-weight: 500;
+  }
+  
+  .footer-price {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+  
+  .footer-seats {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+  
+  .footer-show-id {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+  
+  .footer-buttons {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .back-btn {
+    padding: 0.5rem 1.5rem;
+    border: 1px solid #ffffff;
+    border-radius: 0.25rem;
+    background: none;
+    color: #ffffff;
+  }
+  
+  .proceed-btn {
+    padding: 0.5rem 1.5rem;
+    background-color: #22c55e;
+    color: #000000;
+    font-weight: 600;
+    border-radius: 0.25rem;
+    transition: background-color 0.2s ease;
+  }
+  
+  .proceed-btn:hover {
+    background-color: #16a34a;
+  }

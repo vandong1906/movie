@@ -52,7 +52,7 @@ const Home: React.FC = () => {
           className="logo-home"
           src={logo}
           alt="Film"
-          onClick={() => navigate('/home')}
+          onClick={() => navigate('/')}
           style={{ cursor: 'pointer' }}
         />
         <div className="auth-buttons">

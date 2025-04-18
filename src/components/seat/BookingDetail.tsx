@@ -1,152 +1,199 @@
-import { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import './booking.css';
+import { useAuth } from '../hook/AuthenContext';
 
-interface ShowInfo {
-    movieTitle: string;
-    date: string;
-    time: string;
+interface Show {
+  show_time: string;
+  movie_id: { name: string };
 }
 
-interface Ticket {
-    seat_number: string;
-    price: number;
-    show_id: string;
+interface TicketPayload {
+  orderInfo: string;
+  seat_number: string;
+  price: number;
+  show_id: string;
+  id_user: string;
 }
 
-interface OrderData {
-    amount: number;
-    payment_method: string;
-    transaction_id: string;
-    tickets: Ticket[];
+interface TicketResponse {
+  ticket_id: string;
+  message?: string;
+}
+
+interface PaymentPayload {
+  ticket_id: string;
+  amount: number;
+  payment_method: string;
+  transaction_id: string;
+  return_url: string;
 }
 
 interface PaymentResponse {
-    paymentUrl?: string;
-    message?: string;
+  paymentUrl: string;
+  message?: string;
 }
 
-const BookingDetail: React.FC = () => {
-    const location = useLocation();
-    const [showInfo] = useState<ShowInfo>({
-        movieTitle: "Fast & Furious 10",
-        date: "Thứ bảy, 20/04/2025",
-        time: "19:30"
-    });
+const Booking: React.FC = () => {
+    const {user} =useAuth();
+  const [searchParams] = useSearchParams();
+  const showId = searchParams.get('show_id') || '';
+  const seatString = searchParams.get('seat_numbers') || '';
+  const total = parseInt(searchParams.get('price') ?? '0') || 0;
+  const orderInfo = searchParams.get('order_info') || `ORDER-${Date.now()}`;
+  const seatNumbers = seatString ? seatString.split(',') : [];
+  const seatCount = seatNumbers.length;
+  const baseTotal = Math.floor(total / 1.06);
+  const serviceFee = total - baseTotal;
 
-    const params = new URLSearchParams(location.search);
-    const showId = params.get("show_id") || "";
-    const seatNumbers: string[] = params.get("seat_numbers")?.split(",") || [];
-    const total: number = parseInt(params.get("price") || "0") || 0;
-    const seatCount: number = seatNumbers.length;
-    const baseTotal: number = Math.floor(total / 1.06);
-    const serviceFee: number = total - baseTotal;
+  const [movieName, setMovieName] = useState('Đang tải...');
+  const [showDate, setShowDate] = useState('--');
+  const [showTime, setShowTime] = useState('--');
 
-    const handlePayment = async () => {
-        const transactionId: string = Date.now().toString();
-        const orderData: OrderData = {
-            amount: total,
-            payment_method: "credit_card",
-            transaction_id: transactionId,
-            tickets: seatNumbers.map(seat => ({
-                seat_number: seat,
-                price: Math.floor(total / seatNumbers.length),
-                show_id: showId
-            }))
-        };
+  useEffect(() => {
+    if (!showId) {
+      setMovieName('Không có show_id');
+      return;
+    }
 
-        try {
-            const orderResponse = await fetch("https://backendmovie-10gn.onrender.com/api/orders", {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(orderData)
-            });
-
-            const orderResult = await orderResponse.json();
-            if (!orderResponse.ok) {
-                alert("Lỗi tạo đơn hàng: " + (orderResult.message || "Không rõ lỗi."));
-                return;
-            }
-
-            const orderId = orderResult.order_id || "1";
-            const paymentData = {
-                order_id: orderId,
-                amount: total,
-                payment_method: "credit_card",
-                transaction_id: transactionId,
-                return_url: `${window.location.origin}/payment?order_id=${orderId}&transaction_id=${transactionId}`
-            };
-
-            const paymentResponse = await fetch("https://backendmovie-10gn.onrender.com/api/payments", {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(paymentData)
-            });
-
-            const paymentResult: PaymentResponse = await paymentResponse.json();
-
-            if (paymentResult.paymentUrl) {
-                window.location.href = paymentResult.paymentUrl;
-            } else {
-                alert("Lỗi thanh toán: " + (paymentResult.message  || "Không rõ lỗi."));
-            }
-        } catch (error) {
-            console.error("Lỗi xử lý thanh toán:", error);
-            alert("Đã xảy ra lỗi khi xử lý thanh toán.");
-        }
+    const fetchShowDetails = async () => {
+      try {
+        const res = await fetch(`https://backendmovie-10gn.onrender.com/api/shows/${showId}`);
+        const data: Show = await res.json();
+        const showTimeObj = new Date(data.show_time);
+        setShowDate(showTimeObj.toLocaleDateString('vi-VN'));
+        setShowTime(
+          showTimeObj.toLocaleTimeString('vi-VN', {
+            hour: '2-digit',
+            minute: '2-digit',
+          })
+        );
+        setMovieName(data.movie_id?.name || 'N/A');
+      } catch (error) {
+        setMovieName('Không lấy được tên phim');
+      }
     };
 
-    return (
-        <div className="bg-gradient-to-br from-black via-gray-900 to-green-900 text-white min-h-screen flex items-center justify-center">
-            <div className="w-full max-w-xl p-8 rounded-lg shadow-lg bg-black/60">
-                <h1 className="text-2xl font-bold mb-6">Booking Detail</h1>
+    fetchShowDetails();
+  }, [showId]);
 
-                <div className="mb-6">
-                    <h2 className="text-lg font-semibold mb-2">Lịch chiếu</h2>
-                    <div className="mb-1">
-                        <p className="text-gray-400 text-sm">Tên phim</p>
-                        <p className="font-bold">{showInfo.movieTitle}</p>
-                    </div>
-                    <div className="mb-1">
-                        <p className="text-gray-400 text-sm">Ngày</p>
-                        <p className="flex justify-between">
-                            <span>{showInfo.date}</span>
-                            <span className="text-gray-400">Giờ</span>
-                            <span className="ml-2">{showInfo.time}</span>
-                        </p>
-                    </div>
-                    <div className="mb-1">
-                        <p className="text-gray-400 text-sm">Ghế (<span>{seatCount}</span>)</p>
-                        <p className="font-bold">{seatCount ? seatNumbers.join(", ") : "Chưa chọn ghế"}</p>
-                    </div>
-                </div>
+  const handlePayment = async () => {
+    const transactionId = Date.now().toString();
+    try {
+      const seatPrice = seatCount > 0 ? Math.floor(total / seatCount) : 0;
+      const createdTickets: string[] = [];
 
-                <div className="mb-6">
-                    <h2 className="text-lg font-semibold mb-2">Chi tiết giao dịch</h2>
-                    <div className="flex justify-between text-sm border-b border-gray-700 pb-1">
-                        <span>Ghế thường</span>
-                        <span>₫{baseTotal.toLocaleString()} ({seatCount} ghế)</span>
-                    </div>
-                    <div className="flex justify-between text-sm border-b border-gray-700 py-1">
-                        <span>Phí dịch vụ (6%)</span>
-                        <span>₫{serviceFee.toLocaleString()}</span>
-                    </div>
-                    <div className="flex justify-between font-bold text-lg mt-2">
-                        <span>Tổng tiền</span>
-                        <span className="text-green-400">₫{total.toLocaleString()}đ</span>
-                    </div>
-                </div>
+      for (const seat of seatNumbers) {
+        const ticketRes = await fetch('https://backendmovie-10gn.onrender.com/api/tickets', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            orderInfo,
+            seat_number: seat,
+            price: seatPrice,
+            show_id: showId,
+            id_user: user?.user_id,
+          } as TicketPayload),
+        });
 
-                <p className="text-xs text-gray-400 mb-4">*Vé đã mua không thể trả!</p>
+        const ticketData: TicketResponse = await ticketRes.json();
 
-                <button
-                    onClick={handlePayment}
-                    className="w-full bg-green-500 hover:bg-green-600 transition px-4 py-2 rounded text-white font-semibold"
-                >
-                    Thanh toán
-                </button>
-            </div>
+        if (!ticketRes.ok || !ticketData.ticket_id) {
+          throw new Error(`Không tạo được vé cho ghế ${seat}: ${ticketData.message || ticketRes.statusText}`);
+        }
+
+        createdTickets.push(ticketData.ticket_id);
+      }
+
+      const ticketId = createdTickets[0];
+      const paymentRes = await fetch('https://backendmovie-10gn.onrender.com/api/payments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ticket_id: ticketId,
+          amount: seatPrice,
+          payment_method: 'credit_card',
+          transaction_id: transactionId,
+       
+        } as PaymentPayload),
+      });
+console.log(paymentRes);
+      const paymentData: PaymentResponse = await paymentRes.json();
+
+      if (!paymentRes.ok || !paymentData.paymentUrl) {
+        throw new Error(`Lỗi thanh toán: ${paymentData.message || paymentRes.statusText}`);
+      }
+
+      window.location.href = paymentData.paymentUrl;
+    } catch (error) {
+      console.error('Lỗi tổng thể:', error);
+      alert((error as Error).message || 'Có lỗi xảy ra khi thanh toán.');
+    }
+  };
+
+  const formatCurrencyVND = (amount: number): string => {
+    return `₫${amount.toLocaleString('vi-VN')}`;
+  };
+
+  return (
+    <div className="body-style">
+      <div className="container">
+        <h1 className="heading">Chi tiết vé</h1>
+        <div className="section">
+          <div className="info-item">
+            <p className="label">Tên phim</p>
+            <p className="value">{movieName}</p>
+          </div>
+          <div className="info-item">
+            <p className="label">Ngày</p>
+            <p className="date-time">
+              <span>{showDate}</span>
+              <span className="label-inline">Giờ</span>
+              <span className="time">{showTime}</span>
+            </p>
+          </div>
+          <div className="info-item">
+            <p className="label">
+              Ghế (<span>{seatCount}</span>)
+            </p>
+            <p className="value">{seatCount ? seatNumbers.join(', ') : 'Chưa chọn ghế'}</p>
+          </div>
         </div>
-    );
+        <div className="section">
+          <h2 className="subheading">Thông tin vé</h2>
+          <div className="info-item">
+            <p className="label">User ID</p>
+            <p className="value">#{user?.user_id}</p>
+          </div>
+          <div className="info-item">
+            <p className="label">Mã đơn hàng</p>
+            <p className="value">{orderInfo}</p>
+          </div>
+        </div>
+        <div className="section">
+          <h2 className="subheading">Chi tiết giao dịch</h2>
+          <div className="transaction-item">
+            <span>Ghế thường</span>
+            <span>
+              {formatCurrencyVND(baseTotal)} ({seatCount} ghế)
+            </span>
+          </div>
+          <div className="transaction-item">
+            <span>Phí dịch vụ (6%)</span>
+            <span>{formatCurrencyVND(serviceFee)}</span>
+          </div>
+          <div className="total">
+            <span>Tổng tiền</span>
+            <span className="total-amount">{formatCurrencyVND(total)}đ</span>
+          </div>
+        </div>
+        <p className="note">*Vé đã mua không thể trả!</p>
+        <button className="pay-button" onClick={handlePayment}>
+          Thanh toán
+        </button>
+      </div>
+    </div>
+  );
 };
 
-export default BookingDetail;
+export default Booking;
