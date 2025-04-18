@@ -1,13 +1,4 @@
-body {
-    background: linear-gradient(to bottom right, #000000, #065f46);
-    color: #ffffff;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0;
-  }
-  
+
   .container-style {
     width: 100%;
     max-width: 42rem;
