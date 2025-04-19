@@ -6,6 +6,7 @@ import eyeIcon from '../../assets/eye.png';
 import blockIcon from '../../assets/block.png';
 import googleIcon from '../../assets/google-login.png';
 import { useAuth } from '../hook/AuthenContext';
+import { loginGoogle } from '../../logingoogle';
 
 
 // Define interface for user data
@@ -95,7 +96,8 @@ const Login: React.FC = () => {
           Login now
         </button>
 
-        <button className="google-login-button">
+        <button className="google-login-button" 
+          onClick={loginGoogle}>
           <img src={googleIcon} alt="Google" className="google-icon" />
           <span>Log in with Google</span>
         </button>
