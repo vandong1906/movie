@@ -1,132 +1,153 @@
 /* Gradient background from black via gray-900 to green-900 */
 .bg-gradient {
-    background: linear-gradient(to bottom right, #000000, #111827, #14532d);
-  }
-  
-  /* Text color */
-  .text-white {
-    color: #ffffff;
-  }
-  
-  /* Minimum screen height and flex properties */
-  .min-h-screen {
-    min-height: 100vh;
-  }
-  
-  .flex {
-    display: flex;
-  }
-  
-  .items-center {
-    align-items: center;
-  }
-  
-  .justify-center {
-    justify-content: center;
-  }
-  
-  /* Container */
-  .container {
-    width: 100%;
-    max-width: 32rem;
-    padding: 2rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    background-color: rgba(0, 0, 0, 0.6);
-  }
-  
-  /* Title */
-  .title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-    text-align: center;
-  }
-  
-  /* Section */
-  .section {
-    margin-bottom: 1.5rem;
-  }
-  
-  .section-title {
-    font-size: 1.125rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-  }
-  
-  /* Info Item */
-  .info-item {
-    margin-bottom: 0.25rem;
-  }
-  
-  .label {
-    font-size: 0.875rem;
-    color: #9ca3af;
-  }
-  
-  .label.inline {
-    color: #9ca3af;
-    margin-left: 0.5rem;
-  }
-  
-  .value {
-    font-weight: 700;
-  }
-  
-  /* Date and Time */
-  .date-time {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .ml-2 {
-    margin-left: 0.5rem;
-  }
-  
-  /* Transaction Item */
-  .transaction-item {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.875rem;
-    border-bottom: 1px solid #374151;
-    padding-bottom: 0.25rem;
-    margin-top: 0.25rem;
-  }
-  
-  /* Transaction Total */
-  .transaction-total {
-    display: flex;
-    justify-content: space-between;
-    font-weight: 700;
-    font-size: 1.125rem;
-    margin-top: 0.5rem;
-  }
-  
-  .total-amount {
-    color: #22c55e;
-  }
-  
-  /* Note */
-  .note {
-    font-size: 0.75rem;
-    color: #9ca3af;
-    margin-bottom: 1rem;
-  }
-  
-  /* Pay Button */
-  .pay-button {
-    width: 100%;
-    background-color: #22c55e;
-    color: #ffffff;
-    padding: 0.5rem 1rem;
-    border-radius: 0.25rem;
-    font-weight: 600;
-    transition: background-color 0.2s ease;
-    text-align: center;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .pay-button:hover {
-    background-color: #16a34a;
-  }
+  background: linear-gradient(to bottom right, #000000, #111827, #14532d);
+}
+
+/* Text color */
+.text-white {
+  color: #ffffff;
+}
+
+/* Minimum screen height and flex properties */
+.min-h-screen {
+  min-height: 100vh;
+}
+
+.flex {
+  display: flex;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.body-style {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, #000000, #111827, #14532d);
+}  
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: 32rem;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+/* Title */
+.heading {
+  font-size: 2rem; 
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: #ffffff;
+}
+
+
+/* Section */
+.section {
+  margin-bottom: 1.5rem;
+}
+
+.section-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+/* Info Item */
+.info-item {
+  margin-bottom: 0.25rem;
+}
+
+.label {
+  font-size: 0.875rem;
+  color: #9ca3af;
+}
+
+.label.inline {
+  color: #9ca3af;
+  margin-left: 0.5rem;
+}
+
+.value {
+  font-weight: 700;
+}
+
+/* Date and Time */
+.date-time {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ml-2 {
+  margin-left: 0.5rem;
+}
+
+/* Transaction Item */
+.transaction-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  padding-bottom: 0.25rem;
+  margin-top: 0.25rem;
+}
+
+/* Transaction Total */
+.transaction-total,
+.total {
+display: flex;
+justify-content: space-between;
+align-items: center;
+font-weight: 700;
+font-size: 1.25rem;
+margin-top: 1rem;
+border-top: 1px solid #4b5563;
+padding-top: 0.5rem;
+}
+
+.total-amount {
+color: #22c55e;
+text-align: right;
+flex-shrink: 0;
+min-width: 100px;
+}
+
+
+.total-amount {
+  color: #22c55e;
+}
+
+/* Note */
+.note {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-bottom: 1rem;
+}
+
+/* Pay Button */
+.pay-button {
+  width: 100%;
+  background-color: #22c55e;
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+}
+
+.pay-button:hover {
+  background-color: #16a34a;
+}
