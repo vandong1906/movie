@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, JSX } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams,useNavigate } from 'react-router-dom';
 import './seat.css';
 
 interface Ticket {
@@ -21,7 +21,7 @@ const SeatSelection: React.FC = () => {
   const serviceFeeRate = 0.06;
   const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
   const cols = 10;
-
+const navigate = useNavigate();
   useEffect(() => {
     const fetchBookedSeats = async () => {
       try {
@@ -103,7 +103,7 @@ const SeatSelection: React.FC = () => {
         order_info: orderInfo,
       }).toString();
 
-      window.location.href = `booking?${queryParams}`;
+      navigate(`/booking?${queryParams}`);
     } catch (error) {
       console.error('Lỗi khi đặt vé:', error);
       alert(`Lỗi đặt vé: ${(error as Error).message}`);
