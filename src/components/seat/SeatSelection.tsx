@@ -2,6 +2,7 @@
 import React, { useState, useEffect, JSX } from 'react';
 import { useSearchParams,useNavigate } from 'react-router-dom';
 import './seat.css';
+import { useAuth } from '../hook/AuthenContext';
 
 interface Ticket {
   seat_number: string;
@@ -14,7 +15,7 @@ interface TicketResponse {
 const SeatSelection: React.FC = () => {
   const [searchParams] = useSearchParams();
   const showId = searchParams.get('show_id') || '1';
-  const userId = searchParams.get('id_user') || '1';
+const {user} =useAuth();
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [bookedSeats, setBookedSeats] = useState<string[]>([]);
   const seatPrice = 70000;
@@ -25,7 +26,7 @@ const navigate = useNavigate();
   useEffect(() => {
     const fetchBookedSeats = async () => {
       try {
-        const res = await fetch(`https://backendmovie-10gn.onrender.com/api/tickets?show_id=${showId}`);
+        const res = await fetch(`https://backendmovie-10gn.onrender.com/api/show/${showId}`);
         const data: Ticket[] = await res.json();
         setBookedSeats(data.map(ticket => ticket.seat_number));
       } catch (error) {
@@ -77,7 +78,7 @@ const navigate = useNavigate();
             seat_number: seat,
             price: seatPrice,
             show_id: showId,
-            id_user: userId,
+            id_user: user?.user_id,
           }),
         });
 
@@ -95,7 +96,7 @@ const navigate = useNavigate();
       }
 
       const queryParams = new URLSearchParams({
-        id_user: userId,
+        id_user: user?.user_id ?? "",
         show_id: showId,
         seat_numbers: selectedSeats.join(','),
         price: total.toString(),
@@ -173,7 +174,7 @@ const navigate = useNavigate();
       <div className="footer">
         <div>
           <p className="footer-label">User ID</p>
-          <p className="footer-value user-id">#{userId}</p>
+          <p className="footer-value user-id">#{user?.user_id}</p>
         </div>
         <div>
           <p className="footer-label">Tổng tiền</p>

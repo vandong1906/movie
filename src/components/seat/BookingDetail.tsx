@@ -68,6 +68,7 @@ const Booking: React.FC = () => {
             minute: '2-digit',
           })
         );
+        console.log(data);
         setMovieName(data.movie_id?.name || 'N/A');
       } catch (error) {
         setMovieName('Không lấy được tên phim');
