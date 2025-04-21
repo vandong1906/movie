@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import {useSearchParams } from 'react-router-dom';
 import './booking.css';
 import { useAuth } from '../hook/AuthenContext';
 
@@ -65,7 +65,6 @@ const Booking: React.FC = () => {
   const [showDate, setShowDate] = useState('--');
   const [showTime, setShowTime] = useState('--');
 
- 
   useEffect(() => {
     if (!showId) {
       setMovieName('Không có show_id');
@@ -86,7 +85,7 @@ const Booking: React.FC = () => {
           })
         );
   
-        // ✅ Lấy thẳng tên phim từ data.movie
+        // Lấy thẳng tên phim từ data.movie
         setMovieName(data.movie?.movie_name || 'Không có tên phim');
   
       } catch (error) {
@@ -101,50 +100,48 @@ const Booking: React.FC = () => {
   const handlePayment = async () => {
     const transactionId = Date.now().toString();
     try {
-      const seatPrice = seatCount > 0 ? Math.floor(total / seatCount) : 0;
-      const createdTickets: string[] = [];
+      // Tính giá vé trung bình cho mỗi ghế
+      //const seatPrice = seatCount > 0 ? Math.floor(total / seatCount) : 0;
 
-      for (const seat of seatNumbers) {
-        const ticketRes = await fetch('https://backendmovie-10gn.onrender.com/api/tickets', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            orderInfo,
-            seat_number: seat,
-            price: seatPrice,
-            show_id: showId,
-            id_user: user?.user_id,
-          } as TicketPayload),
-        });
+      // Tạo vé duy nhất cho tất cả các ghế
+      const ticketRes = await fetch('https://backendmovie-10gn.onrender.com/api/tickets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          orderInfo,
+          seat_number: seatNumbers.join(','), // Gửi tất cả ghế trong một vé
+          price: total, // Tổng giá tiền cho tất cả ghế
+          show_id: showId,
+          id_user: user?.user_id,
+          status: 'pending',
+        } as TicketPayload),
+      });
 
-        const ticketData: TicketResponse = await ticketRes.json();
+      const ticketData: TicketResponse = await ticketRes.json();
 
-        if (!ticketRes.ok || !ticketData.ticket_id) {
-          throw new Error(`Không tạo được vé cho ghế ${seat}: ${ticketData.message || ticketRes.statusText}`);
-        }
-
-        createdTickets.push(ticketData.ticket_id);
+      if (!ticketRes.ok || !ticketData.ticket_id) {
+        throw new Error(`Không tạo được vé: ${ticketData.message || ticketRes.statusText}`);
       }
 
-      const ticketId = createdTickets[0];
+      // Thanh toán vé vừa tạo
       const paymentRes = await fetch('https://backendmovie-10gn.onrender.com/api/payments', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          ticket_id: ticketId,
-          amount: seatPrice,
+          ticket_id: ticketData.ticket_id, // ID của vé vừa tạo
+          amount: total, // Tổng số tiền thanh toán
           payment_method: 'credit_card',
           transaction_id: transactionId,
-       
         } as PaymentPayload),
       });
-console.log(paymentRes);
+
       const paymentData: PaymentResponse = await paymentRes.json();
 
       if (!paymentRes.ok || !paymentData.paymentUrl) {
         throw new Error(`Lỗi thanh toán: ${paymentData.message || paymentRes.statusText}`);
       }
 
+      // Chuyển hướng đến URL thanh toán
       window.location.href = paymentData.paymentUrl;
     } catch (error) {
       console.error('Lỗi tổng thể:', error);

@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, JSX } from 'react';
-import { useSearchParams,useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './seat.css';
 import { useAuth } from '../hook/AuthenContext';
 
@@ -17,8 +17,8 @@ interface ShowData {
   tickets: Ticket[];}
 
 const SeatSelection: React.FC = () => {
-  const [searchParams] = useSearchParams();
-  const showId = searchParams.get('show_id') || '1';
+ 
+  // const showId = searchParams.get('show_id') || '1';
 const {user} =useAuth();
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [bookedSeats, setBookedSeats] = useState<string[]>([]);
@@ -27,6 +27,17 @@ const {user} =useAuth();
   const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
   const cols = 10;
 const navigate = useNavigate();
+const location = useLocation();
+  const { movie, showId, showTime, showDate, theaterName } =
+    location.state || {};
+  console.log(
+    "Location state:",
+    showId,
+    movie,
+    showTime,
+    showDate,
+    theaterName
+  );
 useEffect(() => {
   const fetchBookedSeats = async () => {
     try {
@@ -86,6 +97,7 @@ useEffect(() => {
             price: seatPrice,
             show_id: showId,
             id_user: user?.user_id,
+            status: 'pending',
           }),
         });
 
