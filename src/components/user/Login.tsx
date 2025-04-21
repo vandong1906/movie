@@ -49,7 +49,7 @@ const Login: React.FC = () => {
       if (validRole === "admin") {
         navigate("/admin");
       } else {
-        navigate("/");
+        navigate('/');
       }
     } catch (err: any) {
       console.error("Login error:", err);
