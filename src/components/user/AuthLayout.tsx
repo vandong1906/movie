@@ -13,7 +13,9 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ title, showLoginLink, showRegis
   return (
     <div className="min-h-screen flex">
       <div className="left-section">
-        <img className="logo-home" src={logo} alt="Film" />
+      <Link to="/">
+      <img className="logo-home" src={logo} alt="Film" />
+      </Link>
         <div className="welcome-text">
           <h2>Welcome.</h2>
           <h2>Begin your cinematic adventure now with our ticketing platform!</h2>

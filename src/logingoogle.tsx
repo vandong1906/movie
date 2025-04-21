@@ -8,6 +8,7 @@ import {
   signOut,
 
 } from "firebase/auth";
+import CallUser from "./CallUser";
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
@@ -25,6 +26,7 @@ const provider = new GoogleAuthProvider();
 const auth = getAuth(app);
 export const loginGoogle = async () => {
     try {
+
       const result = await signInWithPopup(auth, provider);
   
       // Get the ID token (not the access token)
@@ -35,8 +37,9 @@ export const loginGoogle = async () => {
         throw new Error('No ID token received');
       }
   
-      console.log('Google login success:', result.user); 
-      return result.user; // Return the user object
+      const data = await CallUser().loginGoogle(idToken);
+     
+      return data.user;
     } catch (error) {
       console.error('Error during Google login:', error);
       throw error;

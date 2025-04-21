@@ -4,8 +4,23 @@ import './booking.css';
 import { useAuth } from '../hook/AuthenContext';
 
 interface Show {
+  show_id: number;
   show_time: string;
-  movie_id: { name: string };
+  movie_id: number;
+  theater_id: number;
+  movie: {
+    movie_id: number;
+    movie_name: string;
+    genre: string;
+    duration: string;
+    path: string;
+  };
+  theater: {
+    theater_id: number;
+    theater_name: string;
+    location: string;
+  };
+  tickets: any[];
 }
 
 interface TicketPayload {
@@ -35,7 +50,7 @@ interface PaymentResponse {
 }
 
 const Booking: React.FC = () => {
-    const {user} =useAuth();
+  const {user} =useAuth();
   const [searchParams] = useSearchParams();
   const showId = searchParams.get('show_id') || '';
   const seatString = searchParams.get('seat_numbers') || '';
@@ -50,16 +65,18 @@ const Booking: React.FC = () => {
   const [showDate, setShowDate] = useState('--');
   const [showTime, setShowTime] = useState('--');
 
+ 
   useEffect(() => {
     if (!showId) {
       setMovieName('Không có show_id');
       return;
     }
-
+  
     const fetchShowDetails = async () => {
       try {
         const res = await fetch(`https://backendmovie-10gn.onrender.com/api/shows/${showId}`);
         const data: Show = await res.json();
+  
         const showTimeObj = new Date(data.show_time);
         setShowDate(showTimeObj.toLocaleDateString('vi-VN'));
         setShowTime(
@@ -68,14 +85,18 @@ const Booking: React.FC = () => {
             minute: '2-digit',
           })
         );
-        setMovieName(data.movie_id?.name || 'N/A');
+  
+        // ✅ Lấy thẳng tên phim từ data.movie
+        setMovieName(data.movie?.movie_name || 'Không có tên phim');
+  
       } catch (error) {
         setMovieName('Không lấy được tên phim');
       }
     };
-
+  
     fetchShowDetails();
   }, [showId]);
+  
 
   const handlePayment = async () => {
     const transactionId = Date.now().toString();
