@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import './booking.css';
 import { useAuth } from '../hook/AuthenContext';
 
@@ -29,6 +29,7 @@ interface TicketPayload {
   price: number;
   show_id: string;
   id_user: string;
+  status: string;
 }
 
 interface TicketResponse {
@@ -50,7 +51,7 @@ interface PaymentResponse {
 }
 
 const Booking: React.FC = () => {
-  const {user} =useAuth();
+  const { user } = useAuth();
   const [searchParams] = useSearchParams();
   const showId = searchParams.get('show_id') || '';
   const seatString = searchParams.get('seat_numbers') || '';
@@ -70,12 +71,12 @@ const Booking: React.FC = () => {
       setMovieName('Không có show_id');
       return;
     }
-  
+
     const fetchShowDetails = async () => {
       try {
         const res = await fetch(`https://backendmovie-10gn.onrender.com/api/shows/${showId}`);
         const data: Show = await res.json();
-  
+
         const showTimeObj = new Date(data.show_time);
         setShowDate(showTimeObj.toLocaleDateString('vi-VN'));
         setShowTime(
@@ -84,24 +85,31 @@ const Booking: React.FC = () => {
             minute: '2-digit',
           })
         );
-  
+
         // Lấy thẳng tên phim từ data.movie
-        setMovieName(data.movie?.movie_name || 'Không có tên phim');
-  
+        setMovieName(data.movie?.movie_name || 'N/A');
+
       } catch (error) {
         setMovieName('Không lấy được tên phim');
       }
     };
-  
+
     fetchShowDetails();
   }, [showId]);
-  
+
+ 
 
   const handlePayment = async () => {
-    const transactionId = Date.now().toString();
+    const seatData = JSON.parse(localStorage.getItem('selectedSeats') || '{}');
+    if (!seatData || new Date().getTime() > seatData.expirationTime) {
+      alert('Ghế đã hết hạn, vui lòng chọn lại ghế');
+      // Xóa trạng thái ghế trong localStorage
+      localStorage.removeItem('selectedSeats');
+      return;
+    }
+
     try {
-      // Tính giá vé trung bình cho mỗi ghế
-      //const seatPrice = seatCount > 0 ? Math.floor(total / seatCount) : 0;
+      const transactionId = Date.now().toString();
 
       // Tạo vé duy nhất cho tất cả các ghế
       const ticketRes = await fetch('https://backendmovie-10gn.onrender.com/api/tickets', {
@@ -141,6 +149,10 @@ const Booking: React.FC = () => {
         throw new Error(`Lỗi thanh toán: ${paymentData.message || paymentRes.statusText}`);
       }
 
+      // Sau khi thanh toán thành công, sẽ lưu ghế vào cơ sở dữ liệu
+      // Thực hiện xóa ghế khỏi localStorage sau khi thanh toán thành công
+      localStorage.removeItem('selectedSeats');
+
       // Chuyển hướng đến URL thanh toán
       window.location.href = paymentData.paymentUrl;
     } catch (error) {
@@ -152,6 +164,16 @@ const Booking: React.FC = () => {
   const formatCurrencyVND = (amount: number): string => {
     return `₫${amount.toLocaleString('vi-VN')}`;
   };
+
+  // Kiểm tra trạng thái ghế khi component render
+  useEffect(() => {
+    const seatData = JSON.parse(localStorage.getItem('selectedSeats') || '{}');
+    if (seatData && new Date().getTime() > seatData.expirationTime) {
+      alert('Ghế đã hết hạn, vui lòng chọn lại ghế');
+      localStorage.removeItem('selectedSeats');
+      // Cập nhật lại giao diện, ví dụ: reset ghế hoặc đánh dấu ghế là 'sẵn sàng'
+    }
+  }, []);
 
   return (
     <div className="body-style">

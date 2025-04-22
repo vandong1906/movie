@@ -1,60 +1,48 @@
-
 import React, { useState, useEffect, JSX } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './seat.css';
 import { useAuth } from '../hook/AuthenContext';
 
-
 interface Ticket {
   seat_number: string;
 }
 
-interface TicketResponse {
-  ticket_id: string;
-}
+
+
 interface ShowData {
   show_id: number;
-  tickets: Ticket[];}
+  tickets: Ticket[];
+}
 
 const SeatSelection: React.FC = () => {
- 
-  // const showId = searchParams.get('show_id') || '1';
-const {user} =useAuth();
+  const { user } = useAuth();
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [bookedSeats, setBookedSeats] = useState<string[]>([]);
   const seatPrice = 70000;
   const serviceFeeRate = 0.06;
   const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
   const cols = 10;
-const navigate = useNavigate();
-const location = useLocation();
-  const { movie, showId, showTime, showDate, theaterName } =
+  const navigate = useNavigate();
+  const location = useLocation();
+  const {showId } =
     location.state || {};
-  console.log(
-    "Location state:",
-    showId,
-    movie,
-    showTime,
-    showDate,
-    theaterName
-  );
-useEffect(() => {
-  const fetchBookedSeats = async () => {
-    try {
-      const res = await fetch(`https://backendmovie-10gn.onrender.com/api/shows/${showId}`);
-      const data: ShowData = await res.json();
 
-      console.log("Dữ liệu show:", data);
-      setBookedSeats(data.tickets.map(ticket => ticket.seat_number));
-    } catch (error) {
-      console.error('Lỗi khi lấy danh sách ghế đã mua:', error);
+  useEffect(() => {
+    const fetchBookedSeats = async () => {
+      try {
+        const res = await fetch(`https://backendmovie-10gn.onrender.com/api/shows/${showId}`);
+        const data: ShowData = await res.json();
+        setBookedSeats(data.tickets.map(ticket => ticket.seat_number));
+      } catch (error) {
+        console.error('Lỗi khi lấy danh sách ghế đã mua:', error);
+      }
+    };
+
+    if (showId) {
+      fetchBookedSeats();
     }
-  };
+  }, [showId]);
 
-  if (showId) {
-    fetchBookedSeats();
-  }
-}, [showId]);
   const formatCurrencyVND = (amount: number): string => {
     return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
   };
@@ -85,41 +73,23 @@ useEffect(() => {
       const orderInfo = `ORDER-${Date.now()}`;
       const createdTicketIds: string[] = [];
 
-      for (const seat of selectedSeats) {
-        const res = await fetch('https://backendmovie-10gn.onrender.com/api/tickets', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            orderInfo,
-            seat_number: seat,
-            price: seatPrice,
-            show_id: showId,
-            id_user: user?.user_id,
-            status: 'pending',
-          }),
-        });
+      // Lưu thông tin vé tạm thời vào localStorage
+      const seatData = {
+        seats: selectedSeats,
+        orderInfo,
+        showId,
+        userId: user?.user_id,
+        total,
+        createdTicketIds,
+      };
+      localStorage.setItem('seatData', JSON.stringify(seatData));
 
-        if (!res.ok) {
-          const error = await res.json();
-          throw new Error(`Không thể tạo vé cho ghế ${seat}: ${error.message || res.statusText}`);
-        }
-
-        const result: TicketResponse = await res.json();
-        if (!result.ticket_id) {
-          throw new Error(`Phản hồi không hợp lệ cho ghế ${seat}`);
-        }
-
-        createdTicketIds.push(result.ticket_id);
-      }
-
+      // Chuyển hướng người dùng đến trang thanh toán
       const queryParams = new URLSearchParams({
         id_user: user?.user_id ?? "",
         show_id: showId,
         seat_numbers: selectedSeats.join(','),
         price: total.toString(),
-        ticket_id: createdTicketIds.join(','),
         order_info: orderInfo,
       }).toString();
 
@@ -219,5 +189,3 @@ useEffect(() => {
 };
 
 export default SeatSelection;
-
-
