@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from "react";
+import React, { useState, FormEvent, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthLayout from "./AuthLayout";
 import axios from "axios";
@@ -8,7 +8,6 @@ import googleIcon from "../../assets/google-login.png";
 import { useAuth } from "../hook/AuthenContext";
 import { loginGoogle } from "../../logingoogle";
 
-// Define interface for user data
 interface User {
   user_id: number | null;
   role: "admin" | "user";
@@ -19,14 +18,23 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [loginMessage, setLoginMessage] = useState<string>("");
   const navigate = useNavigate();
-  const { login, user } = useAuth();
+  const { login } = useAuth();
+
+  useEffect(() => {
+    const message = localStorage.getItem('loginMessage');
+    if (message) {
+      setLoginMessage(message);
+      localStorage.removeItem('loginMessage');
+    }
+  }, []);
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
     if (!email || !password) {
-      setError("Email and password are required.");
+      setError("Email và mật khẩu là bắt buộc.");
       return;
     }
     try {
@@ -37,15 +45,13 @@ const Login: React.FC = () => {
       );
 
       const validRole = res.data.role === "admin" ? "admin" : "user";
-      console.log(res.data.id);
       if (res.data.id) {
         login({
           user_id: res.data.id ? String(res.data.id) : null,
           role: validRole,
         });
+        localStorage.setItem('isLoggedIn', 'true');
       }
-      console.log(validRole);
-      console.log(user);
       if (validRole === "admin") {
         navigate("/admin");
       } else {
@@ -54,14 +60,19 @@ const Login: React.FC = () => {
     } catch (err: any) {
       console.error("Login error:", err);
       setError(
-        err.response?.data?.message || "Login failed. Please try again."
+        err.response?.data?.message || "Đăng nhập thất bại. Vui lòng thử lại."
       );
     }
   };
 
   return (
-    <AuthLayout title="Login to your account" showRegisterLink={true}>
+    <AuthLayout title="Đăng nhập" showRegisterLink={true}>
       <form onSubmit={handleLogin} className="signup-form space-y-4">
+        {loginMessage && (
+          <p className="text-yellow-500 text-sm bg-yellow-100 p-2 rounded text-center">
+            {loginMessage}
+          </p>
+        )}
         <label htmlFor="email">Email</label>
         <input
           id="email"
@@ -72,15 +83,14 @@ const Login: React.FC = () => {
           required
           className="w-full p-2 border rounded"
         />
-
-        <label htmlFor="password">Password</label>
+        <label htmlFor="password">Mật khẩu</label>
         <div className="password-container relative">
           <input
             id="password"
-            type={showPassword ? "text" : "password"}
+            type={showPassword ? 'text' : 'password'}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter your password"
+            placeholder="Nhập mật khẩu của bạn"
             required
             className="w-full p-2 border rounded"
           />
@@ -92,22 +102,19 @@ const Login: React.FC = () => {
             style={{ cursor: "pointer" }}
           />
         </div>
-
         {error && <p className="text-red-500 text-sm">{error}</p>}
-        <button type="submit" className="create-button">
-          Login now
+        <button type="submit" className="create-button bg-blue-500 text-white p-2 rounded w-full">
+          Đăng nhập
         </button>
-
         <button
-          className="google-login-button"
+          className="google-login-button flex items-center justify-center space-x-2 border p-2 rounded w-full"
           onClick={async () => {
             const data = await loginGoogle();
-
-            console.log(data);
             login({
               user_id: data.id,
               role: data.role,
             });
+            localStorage.setItem('isLoggedIn', 'true');
             if (data.role === "admin") {
               navigate("/admin");
             } else {
@@ -115,8 +122,8 @@ const Login: React.FC = () => {
             }
           }}
         >
-          <img src={googleIcon} alt="Google" className="google-icon" />
-          <span>Log in with Google</span>
+          <img src={googleIcon} alt="Google" className="google-icon w-5 h-5" />
+          <span>Đăng nhập bằng Google</span>
         </button>
       </form>
     </AuthLayout>

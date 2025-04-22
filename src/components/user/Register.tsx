@@ -18,7 +18,7 @@ const Register: React.FC = () => {
     setError('');
 
     if (password !== confirmPass) {
-      setError("Passwords don't match");
+      setError('Mật khẩu không khớp');
       return;
     }
     try {
@@ -31,12 +31,12 @@ const Register: React.FC = () => {
       navigate('/login');
     } catch (err: any) {
       console.error('Registration error:', err);
-      setError(err.response?.data?.message || 'Registration failed. Please try again.');
+      setError(err.response?.data?.message || 'Đăng ký thất bại. Vui lòng thử lại.');
     }
   };
 
   return (
-    <AuthLayout title="Create an account" showLoginLink>
+    <AuthLayout title="Đăng ký tài khoản" showLoginLink>
       <form onSubmit={handleRegister} className="signup-form space-y-4">
         <label htmlFor="email">Email</label>
         <input
@@ -48,14 +48,14 @@ const Register: React.FC = () => {
           required
           className="w-full p-2 border rounded"
         />
-        <label htmlFor="password">Password</label>
+        <label htmlFor="password">Mật khẩu</label>
         <div className="password-container relative">
           <input
             id="password"
             type={showPassword ? 'text' : 'password'}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter your password"
+            placeholder="Nhập mật khẩu của bạn"
             required
             className="w-full p-2 border rounded"
           />
@@ -68,14 +68,14 @@ const Register: React.FC = () => {
           />
         </div>
 
-        <label htmlFor="confirmPass">Confirm Password</label>
+        <label htmlFor="confirmPass">Xác nhận mật khẩu</label>
         <div className="password-container relative">
           <input
             id="confirmPass"
             type={showPassword ? 'text' : 'password'}
             value={confirmPass}
             onChange={(e) => setConfirmPass(e.target.value)}
-            placeholder="Confirm your password"
+            placeholder="Xác nhận mật khẩu của bạn"
             required
             className="w-full p-2 border rounded"
           />
@@ -83,7 +83,7 @@ const Register: React.FC = () => {
             src={showPassword ? blockIcon : eyeIcon}
             alt="Toggle Password"
             className="eye-icon absolute right-2 top-2 w-5 h-5"
-onClick={() => setShowPassword(!showPassword)}
+            onClick={() => setShowPassword(!showPassword)}
             style={{ cursor: 'pointer' }}
           />
         </div>
@@ -91,7 +91,7 @@ onClick={() => setShowPassword(!showPassword)}
         {error && <p className="text-red-500">{error}</p>}
 
         <button type="submit" className="create-button bg-blue-500 text-white p-2 rounded w-full">
-          Create account
+          Đăng ký
         </button>
       </form>
     </AuthLayout>

@@ -28,6 +28,7 @@ interface Theater {
 const MovieDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
 
   const [movie, setMovie] = useState<Movie | null>(null);
   const [theaters, setTheaters] = useState<Theater[]>([]);
@@ -37,6 +38,16 @@ const MovieDetail: React.FC = () => {
   const [selectedTime, setSelectedTime] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [notification, setNotification] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const handleLogin = () => {
+    navigate('/login');
+  };
+
+  const handleRegister = () => {
+    navigate('/register');
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,7 +69,7 @@ const MovieDetail: React.FC = () => {
         }
       } catch (err) {
         console.error('Error fetching data:', err);
-        setError('Failed to load data. Please try again later.');
+        setError('Không tải được dữ liệu. Vui lòng thử lại sau.');
       } finally {
         setLoading(false);
       }
@@ -115,17 +126,28 @@ const MovieDetail: React.FC = () => {
 
   const formatDate = (dateStr: string): string => {
     const parts = dateStr?.split(' ');
-    if (parts?.length < 3) return 'Select a date';
+    if (parts?.length < 3) return 'Chọn ngày';
     const [day, month] = parts;
     const monthMap: Record<string, string> = {
-      Jan: 'January', Feb: 'February', Mar: 'March', Apr: 'April',
-      May: 'May', Jun: 'June', Jul: 'July', Aug: 'August',
-      Sep: 'September', Oct: 'October', Nov: 'November', Dec: 'December'
+      Jan: 'Tháng 1', Feb: 'Tháng 2', Mar: 'Tháng 3', Apr: 'Tháng 4',
+      May: 'Tháng 5', Jun: 'Tháng 6', Jul: 'Tháng 7', Aug: 'Tháng 8',
+      Sep: 'Tháng 9', Oct: 'Tháng 10', Nov: 'Tháng 11', Dec: 'Tháng 12'
     };
     return `${day} ${monthMap[month] || month} 2023`;
   };
 
   const handleProceed = () => {
+    if (!selectedTheater || !selectedDate || !selectedTime) {
+      setNotification('Vui lòng chọn rạp chiếu, ngày và giờ trước khi tiếp tục.');
+      setTimeout(() => setNotification(null), 3000);
+      return;
+    }
+
+    if (!isLoggedIn) {
+      setIsModalOpen(true);
+      return;
+    }
+
     const selectedShow = shows.find((show) => {
       const date = new Date(show.show_time);
       return (
@@ -136,7 +158,8 @@ const MovieDetail: React.FC = () => {
     });
 
     if (!selectedShow) {
-      alert('No matching show found for the selected options.');
+      setNotification('Không tìm thấy lịch chiếu phù hợp với các tùy chọn đã chọn.');
+      setTimeout(() => setNotification(null), 3000);
       return;
     }
 
@@ -151,33 +174,92 @@ const MovieDetail: React.FC = () => {
     });
   };
 
+  const handleModalConfirm = () => {
+    localStorage.setItem('loginMessage', 'Vui lòng đăng nhập để tiếp tục đặt vé.');
+    navigate('/login');
+    setIsModalOpen(false);
+  };
+
+  const handleModalCancel = () => {
+    setIsModalOpen(false);
+  };
+
   const handleLogout = () => {
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('user');
-    navigate('/');
+    navigate('/login');
   };
 
   const handleBackToHome = () => navigate('/');
 
-  if (loading) return <div className="text-white p-10">Loading...</div>;
-  if (error) return <div className="text-white p-10">{error}</div>;
-  if (!movie) return <div className="text-white p-10">Movie not found</div>;
+  const isProceedDisabled = !selectedTheater || !selectedDate || !selectedTime;
+
+  if (loading) return <div className="loading">Đang tải...</div>;
+  if (error) return <div className="error">{error}</div>;
+  if (!movie) return <div className="error">Không tìm thấy phim</div>;
 
   return (
     <div className="movie-detail-container">
-      <header className="header">
-        <div className="logo-section">
-          <img src={logo} alt="Film" className="logo-home" style={{ cursor: 'pointer' }} onClick={() => navigate('/')} />
+      <div className="header">
+        <img
+          className="logo-home"
+          src={logo}
+          alt="Film"
+          onClick={() => navigate('/')}
+        />
+        <div className="auth-buttons">
+          {isLoggedIn ? (
+            <>
+              <button className="ticket-button" onClick={() => navigate('/my-ticket')}>
+                Vé của tôi
+              </button>
+              <button className="logout-button" onClick={handleLogout}>
+                Đăng xuất
+              </button>
+            </>
+          ) : (
+            <>
+              <button className="auth-button" onClick={handleLogin}>
+                Đăng nhập
+              </button>
+              <button className="auth-button" onClick={handleRegister}>
+                Đăng ký
+              </button>
+            </>
+          )}
         </div>
-        <button className="logout-button" onClick={handleLogout}>Log Out</button>
-      </header>
+      </div>
       <button className="back-to-home-button" onClick={handleBackToHome}>
         <img src={bth} alt="Back" className="back-icon" />
       </button>
+
+      {notification && (
+        <div className="notification">
+          {notification}
+        </div>
+      )}
+
+      {isModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3>Yêu cầu đăng nhập</h3>
+            <p>Bạn cần đăng nhập để tiếp tục đặt vé. Bạn có muốn đăng nhập ngay bây giờ không?</p>
+            <div className="modal-buttons">
+              <button className="modal-button cancel" onClick={handleModalCancel}>
+                Từ chối
+              </button>
+              <button className="modal-button confirm" onClick={handleModalConfirm}>
+                Đồng ý
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="movie-detail-content">
         <div className="selection-section">
           <div>
-            <h3>THEATER</h3>
+            <h3>RẠP</h3>
             <div className="options">
               {theaters.map((t) => (
                 <button
@@ -195,7 +277,7 @@ const MovieDetail: React.FC = () => {
             </div>
           </div>
           <div>
-            <h3>DATE</h3>
+            <h3>NGÀY</h3>
             <div className="options">
               {getUniqueDates().length > 0 ? (
                 getUniqueDates().map((date) => (
@@ -210,11 +292,13 @@ const MovieDetail: React.FC = () => {
                     {date}
                   </button>
                 ))
-              ) : <p>No showtimes available for this theater.</p>}
+              ) : (
+                <p>Không có lịch chiếu cho rạp này.</p>
+              )}
             </div>
           </div>
           <div>
-            <h3>TIME</h3>
+            <h3>GIỜ</h3>
             <div className="options">
               {getUniqueTimes().length > 0 ? (
                 getUniqueTimes().map((time) => (
@@ -226,7 +310,9 @@ const MovieDetail: React.FC = () => {
                     {time}
                   </button>
                 ))
-              ) : <p>No times available for this date.</p>}
+              ) : (
+                <p>Vui lòng chọn ngày!</p>
+              )}
             </div>
           </div>
         </div>
@@ -234,19 +320,26 @@ const MovieDetail: React.FC = () => {
           <img src={movie.path} alt={movie.movie_name} className="movie-poster-large" />
           <h2>{movie.movie_name}</h2>
           <div className="movie-details">
-            <p>Duration: <span>{movie.duration}</span></p>
-            <p>Type: <span>{movie.genre}</span></p>
+            <p>
+              Thời lượng: <span>{movie.duration}</span>
+            </p>
+            <p>
+              Thể loại: <span>{movie.genre}</span>
+            </p>
           </div>
           <div className="booking-summary">
-            <h4>{selectedTheater || 'Select a theater'}</h4>
-            <p>{formatDate(selectedDate)} {selectedTime || 'Select a time'}</p>
-            <p className="note">*Seat selection can be done after this</p>
+            <h4>{selectedTheater || 'Chọn rạp chiếu'}</h4>
+            <p>
+              {formatDate(selectedDate)} {selectedTime || 'Chọn giờ'}
+            </p>
+            <p className="note">Hãy nhấn "Thanh toán" để chọn ghế</p>
             <button
               className="proceed-button"
               onClick={handleProceed}
-              disabled={!selectedTheater || !selectedDate || !selectedTime}
+              disabled={isProceedDisabled}
+              title={isProceedDisabled ? 'Vui lòng chọn rạp chiếu, ngày và giờ' : 'Tiến hành thanh toán'}
             >
-              Proceed
+              Thanh toán
             </button>
           </div>
         </div>

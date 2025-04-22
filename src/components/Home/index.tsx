@@ -29,7 +29,7 @@ const Home: React.FC = () => {
   };
 
   const handleRegister = () => {
-    navigate('/');
+    navigate('/register');
   };
 
   useEffect(() => {
@@ -59,25 +59,25 @@ const Home: React.FC = () => {
           {isLoggedIn ? (
             <>
               <button onClick={() => navigate('/my-ticket')} className="ticket-button">
-                My Ticket
+                Vé của tôi
               </button>
               <button onClick={handleLogout} className="logout-button">
-                Logout
+                Đăng xuất
               </button>
             </>
           ) : (
             <>
               <button onClick={handleLogin} className="auth-button">
-                Log In
+                Đăng nhập
               </button>
               <button onClick={handleRegister} className="auth-button">
-                Register
+                Đăng ký
               </button>
             </>
           )}
         </div>
       </div>
-      <h2 className="section-title">Now Showing</h2>
+      <h2 className="section-title">Đang chiếu</h2>
       <div className="movie-grid">
         {movies.map((movie) => (
           <div

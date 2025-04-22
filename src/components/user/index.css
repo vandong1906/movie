@@ -52,6 +52,7 @@
 .hover\:bg-green-600:hover {
   background-color: #059669;
 }
+
 /* Căn chỉnh logo và nút Back to Home */
 .logo-section {
   display: flex;
@@ -62,20 +63,23 @@
 /* General body styling */
 body {
   background-color: #ffffff;
-  color: #1f2937; /* Tailwind's gray-800 */
+  color: #1f2937;
+  /* Tailwind's gray-800 */
   font-family: 'sans-serif';
 }
 
 /* Left content headings */
 .left-content h1 {
-  font-size: 3rem; /* text-5xl */
+  font-size: 3rem;
+  /* text-5xl */
   font-weight: 700;
   margin-bottom: 1.5rem;
   color: #ffffff;
 }
 
 .left-content h2 {
-  font-size: 1.25rem; /* text-xl */
+  font-size: 1.25rem;
+  /* text-xl */
   color: #BEBEBF;
   line-height: 1.625;
 }
@@ -100,9 +104,11 @@ body {
   color: #ffffff;
   font-weight: 600;
   padding: 0.75rem 0;
-  border-radius: 0.5rem;
+  border-radius: 5.5rem;
   width: 100%;
+  font-size: 30px;
   transition: background-color 0.3s;
+  font-style: bold;
 }
 
 .create-button:hover {
@@ -124,7 +130,8 @@ body {
 
 /* Left side of auth layout */
 .auth-left {
-  background-color: #f3f4f6; /* Tailwind gray-100 */
+  background-color: #f3f4f6;
+  /* Tailwind gray-100 */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -155,7 +162,8 @@ body {
 
 /* Logo */
 .logo {
-  width: 10rem; /* 40 in Tailwind = 10rem */
+  width: 10rem;
+  /* 40 in Tailwind = 10rem */
   height: auto;
   margin-bottom: 1.5rem;
 }
@@ -166,7 +174,8 @@ body {
 }
 
 .auth-title {
-  font-size: 1.25rem; /* text-xl */
+  font-size: 1.25rem;
+  /* text-xl */
   font-weight: 700;
   margin-bottom: 1.5rem;
   text-align: center;
@@ -180,7 +189,8 @@ body {
 }
 
 .auth-link a {
-  color: #3b82f6; /* Tailwind blue-500 */
+  color: #3b82f6;
+  /* Tailwind blue-500 */
   text-decoration: none;
 }
 
@@ -241,6 +251,16 @@ body {
   margin-top: 20px;
   margin-bottom: 2rem;
   font-family: 'Poppins', sans-serif;
+}
+
+.right-section h3 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #111;
+
 }
 
 @media (max-width: 768px) {
@@ -610,6 +630,79 @@ body {
   /* Giới hạn chiều rộng tối đa trên desktop */
 }
 
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  transform: scale(1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.modal-content h3 {
+  font-family: Poppins, sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.modal-content p {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.modal-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.modal-button.cancel {
+  background: #ccc;
+  color: #333;
+}
+
+.modal-button.cancel:hover {
+  background: #bbb;
+}
+
+.modal-button.confirm {
+  background: #00cc00;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+}
+
+.modal-button.confirm:hover {
+  opacity: 0.8;
+}
+
 /* Chỉ định vị trí cột cho các thẻ trên desktop (4 cột) */
 .movie-grid .movie-card:nth-child(4n-3) {
   grid-column: 2 !important;
@@ -880,7 +973,7 @@ body {
 }
 
 .selection-section {
-  width: 60%;
+  width: 45%;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -890,6 +983,7 @@ body {
   font-size: 1.25rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
+  font-family: poppins, sans-serif;
 }
 
 .options {
@@ -1102,6 +1196,7 @@ body {
   color: #00cc00;
   text-decoration: none;
 }
+
 /* Container for the two-column layout */
 .auth-layout {
   display: flex;
@@ -1352,4 +1447,40 @@ body {
 
 .auth-link a:hover {
   text-decoration: underline;
+}
+
+.notification {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ff4d4f;
+  /* Màu nền đỏ nhạt */
+  color: white;
+  padding: 15px 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  font-size: 16px;
+  text-align: center;
+  animation: fadeInOut 3s ease-in-out;
+}
+
+/* Animation để thông báo xuất hiện và biến mất mượt mà */
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }
