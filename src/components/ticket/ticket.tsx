@@ -45,7 +45,7 @@ interface Ticket {
 const MovieTicket = () => {
   const [data1, setdata1] = React.useState<Ticket[] | null>();
   const { user } = useAuth();
-
+  const [filteredTickets, setFilteredTickets] = React.useState<Ticket[] | null>(null);
   useEffect(() => {
     const respon = async () => {
       const data = await axios.get(
@@ -55,6 +55,7 @@ const MovieTicket = () => {
       const { tickets } = data.data;
 
       setdata1(tickets);
+      setFilteredTickets(tickets);
     };
     respon();
   }, []);
@@ -73,7 +74,15 @@ const MovieTicket = () => {
   const handleRegister = () => {
     navigate("/");
   };
+  const handlePendingTickets = () => {
+    const pendingTickets = data1?.filter((ticket) => ticket.status === "pending");
+    setFilteredTickets(pendingTickets || []);
+  };
 
+  const handlePaidTickets = () => {
+    const paidTickets = data1?.filter((ticket) => ticket.status === "paid");
+    setFilteredTickets(paidTickets || []);
+  };
   return (
     <>
       <div className="home-container">
@@ -110,10 +119,25 @@ const MovieTicket = () => {
             )}
           </div>
         </div>
-        <h2 className="section-title">My ticket</h2>
+        <div className="flex justify-center items-center mt-10 mb-5 gap-6">
+          <button
+            type="button"
+            onClick={handlePendingTickets}
+            className="section-title cursor-pointer border-2 rounded-full p-3"
+          >
+            My Ticket
+          </button>
+          <button
+            type="button"
+            onClick={handlePaidTickets}
+            className="section-title cursor-pointer border-2 rounded-full p-3"
+          >
+            Ticket Paid
+          </button>
+        </div>
         <div className="movie-grid items-center">
           <div className="bg-gray-800 bg-opacity-80 rounded-lg p-6 shadow-lg text-white w-80">
-            {data1?.map((ticket) => (
+            {filteredTickets?.map((ticket) => (
               <div key={ticket.ticket_id} className="mb-4">
                 {/* Display Date */}
                 <p className="text-sm text-gray-400">Date</p>

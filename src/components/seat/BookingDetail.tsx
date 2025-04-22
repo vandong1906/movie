@@ -28,7 +28,7 @@ interface TicketPayload {
   seat_number: string;
   price: number;
   show_id: string;
-  id_user: string;
+  user_id: string;
   status: string;
 }
 
@@ -120,7 +120,7 @@ const Booking: React.FC = () => {
           seat_number: seatNumbers.join(','), // Gửi tất cả ghế trong một vé
           price: total, // Tổng giá tiền cho tất cả ghế
           show_id: showId,
-          id_user: user?.user_id,
+          user_id: user?.user_id,
           status: 'pending',
         } as TicketPayload),
       });
